@@ -44,8 +44,9 @@
   input[type="button"], 
   input[type="checkbox"], 
   input[type="radio"], 
-  label {
-    cursor: pointer;
+  label,
+  .cursor-pointer {
+    cursor: pointer !important;
   }
 }
 

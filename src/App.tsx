@@ -19,6 +19,7 @@ import Contact from './pages/Contact';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import LegalNotice from './pages/LegalNotice';
 import SafetyHandling from './pages/SafetyHandling';
+import SoleTalent from './pages/SoleTalent';
 
 export default function App() {
   return (
@@ -40,6 +41,7 @@ export default function App() {
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/legal-notice" element={<LegalNotice />} />
             <Route path="/safety-handling" element={<SafetyHandling />} />
+            <Route path="/sole-talent" element={<SoleTalent />} />
           </Routes>
         </main>
         <Footer />

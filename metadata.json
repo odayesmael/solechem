@@ -1,0 +1,5 @@
+{
+  "name": "SoleChem Europe — B2B Chemical Supplier",
+  "description": "B2B chemical distributor & manufacturer based in Milan, Italy. Supplying 2,808+ products across 20 industrial sectors.",
+  "requestFramePermissions": ["camera", "microphone"]
+}

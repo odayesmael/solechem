@@ -20,6 +20,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import LegalNotice from './pages/LegalNotice';
 import SafetyHandling from './pages/SafetyHandling';
 import SoleTalent from './pages/SoleTalent';
+import News from './pages/News';
 
 export default function App() {
   return (
@@ -42,6 +43,7 @@ export default function App() {
             <Route path="/legal-notice" element={<LegalNotice />} />
             <Route path="/safety-handling" element={<SafetyHandling />} />
             <Route path="/sole-talent" element={<SoleTalent />} />
+            <Route path="/news" element={<News />} />
           </Routes>
         </main>
         <Footer />

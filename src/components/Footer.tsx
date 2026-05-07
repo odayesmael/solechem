@@ -47,7 +47,8 @@ export default function Footer() {
                 { label: 'Custom Manufacturing', path: '/manufacturing' },
                 { label: 'Company Profile', path: '/about' },
                 { label: 'B2B Contact', path: '/contact' },
-                { label: 'Sole Talent', path: '/sole-talent' }
+                { label: 'Sole Talent', path: '/sole-talent' },
+                { label: 'News & Insights', path: '/news' }
               ].map(link => (
                 <li key={link.path}>
                   <Link to={link.path} className="group flex items-center text-slate-600 hover:text-orange-600 font-medium transition-colors">

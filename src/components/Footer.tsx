@@ -28,7 +28,7 @@ export default function Footer() {
               Premium B2B chemical distributor and manufacturer based in Milan, Italy. Providing verified industrial buyers with high-purity chemicals across 50+ countries since 2013.
             </p>
             <div className="flex gap-3">
-              <a href="#" className="w-10 h-10 rounded-sm bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-orange-600 hover:border-orange-500 hover:bg-orange-50 transition-all shadow-sm">
+              <a href="https://www.linkedin.com/company/solechem/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-sm bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-orange-600 hover:border-orange-500 hover:bg-orange-50 transition-all shadow-sm">
                 <Linkedin className="w-4 h-4" />
               </a>
               <a href="mailto:info@solechem.eu" className="w-10 h-10 rounded-sm bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-orange-600 hover:border-orange-500 hover:bg-orange-50 transition-all shadow-sm">
@@ -68,7 +68,7 @@ export default function Footer() {
                 <div className="bg-orange-100/50 p-2 rounded-sm shrink-0">
                   <MapPin className="w-4 h-4 text-orange-600" />
                 </div>
-                <span className="leading-snug pt-1">Cassina de' Pecchi<br/>Milan, Italy</span>
+                <span className="leading-snug pt-1">Via Leonardo da Vinci 9<br/>20051 Cassina de'Pecchi (MI), Italy</span>
               </li>
               <li className="flex items-center gap-3">
                 <div className="bg-orange-100/50 p-2 rounded-sm shrink-0">
@@ -80,7 +80,7 @@ export default function Footer() {
                 <div className="bg-orange-100/50 p-2 rounded-sm shrink-0">
                   <Mail className="w-4 h-4 text-orange-600" />
                 </div>
-                <span>b2b@solechem.eu</span>
+                <span>info@solechem.eu</span>
               </li>
             </ul>
           </div>

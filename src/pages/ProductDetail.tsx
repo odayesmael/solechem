@@ -397,7 +397,7 @@ export default function ProductDetail() {
                   <a href="tel:+390230556150" className="flex-1 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-sm p-2 flex items-center justify-center transition-colors border border-slate-200 dark:border-slate-700">
                     <Phone className="w-4 h-4 text-slate-600 dark:text-slate-400" />
                   </a>
-                  <a href="mailto:o.alatbash@solechem.com" className="flex-1 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-sm p-2 flex items-center justify-center transition-colors border border-slate-200 dark:border-slate-700">
+                  <a href="mailto:info@solechem.eu" className="flex-1 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-sm p-2 flex items-center justify-center transition-colors border border-slate-200 dark:border-slate-700">
                     <Mail className="w-4 h-4 text-slate-600 dark:text-slate-400" />
                   </a>
                   <button className="flex-1 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-sm p-2 flex items-center justify-center transition-colors border border-slate-200 dark:border-slate-700">

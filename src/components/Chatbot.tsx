@@ -35,7 +35,7 @@ export default function Chatbot() {
       const response = await getChatResponse(userMessage, messages);
       setMessages(prev => [...prev, { role: 'bot', text: response || "I'm sorry, I couldn't process that request." }]);
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'bot', text: "Technical error. Please contact b2b@solechem.eu directly." }]);
+      setMessages(prev => [...prev, { role: 'bot', text: "Technical error. Please contact info@solechem.eu directly." }]);
     } finally {
       setIsLoading(false);
     }

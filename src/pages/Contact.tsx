@@ -217,8 +217,8 @@ export default function Contact() {
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">B2B Email (RFQ/NDA)</p>
-                    <p className="text-[15px] font-bold text-orange-400">b2b@solechem.eu</p>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Email</p>
+                    <p className="text-[15px] font-bold text-orange-400">info@solechem.eu</p>
                     <p className="text-[11px] text-slate-500 font-medium mt-1">24h guaranteed response</p>
                   </div>
                 </div>
@@ -263,11 +263,11 @@ export default function Contact() {
                 </div>
               </div>
               <div className="space-y-1 bg-white p-4 rounded-sm border border-slate-200 shadow-sm">
-                <p className="text-[14px] font-bold text-slate-900">SoleChem Europe S.r.l.</p>
+                <p className="text-[14px] font-bold text-slate-900">SoleChem S.R.L.</p>
                 <p className="text-[13px] text-slate-600 leading-relaxed font-medium">
-                  Via Cassina de' Pecchi, 12<br />
-                  20060 Cassina de' Pecchi (MI)<br />
-                  Milan, Italy
+                  Via Leonardo da Vinci 9<br />
+                  20051 Cassina de'Pecchi (MI)<br />
+                  Italy
                 </p>
               </div>
             </div>

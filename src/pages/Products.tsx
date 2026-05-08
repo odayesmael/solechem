@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Search, Filter, Grid, List, ArrowRight, ChevronRight, ChevronLeft, Info, X, ShieldCheck, Package } from 'lucide-react';
+import { Search, Filter, Grid, List, ArrowRight, ChevronRight, ChevronLeft, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { PRODUCTS } from '@/constants';
@@ -18,8 +18,7 @@ export default function Products() {
   // Filter States
   const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [activeIndustries, setActiveIndustries] = useState<string[]>(initialIndustry ? [initialIndustry] : []);
-  const [activeGrades, setActiveGrades] = useState<string[]>([]);
-  const [activeCompliances, setActiveCompliances] = useState<string[]>([]);
+
 
   const [currentPage, setCurrentPage] = useState(() => parseInt(searchParams.get('page') || '1', 10));
   const ITEMS_PER_PAGE = 50;
@@ -59,12 +58,11 @@ export default function Products() {
   // Extract unique filter options from data
   const categories = ['All', ...Array.from(new Set(PRODUCTS.map(p => p.category))).sort()];
   const industries = Array.from(new Set(PRODUCTS.flatMap(p => p.industry)));
-  const grades = Array.from(new Set(PRODUCTS.map(p => p.grade)));
-  const compliances = Array.from(new Set(PRODUCTS.flatMap(p => p.compliance || []))).filter(c => c !== "REACH");
+
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, activeCategory, activeIndustries, activeGrades, activeCompliances]);
+  }, [search, activeCategory, activeIndustries]);
 
   const toggleFilter = (setter: React.Dispatch<React.SetStateAction<string[]>>, value: string) => {
     setter(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
@@ -79,12 +77,10 @@ export default function Products() {
       const matchesCategory = activeCategory === 'All' || p.category === activeCategory;
 
       const matchesIndustry = activeIndustries.length === 0 || activeIndustries.some(i => p.industry.includes(i));
-      const matchesGrade = activeGrades.length === 0 || activeGrades.includes(p.grade);
-      const matchesCompliance = activeCompliances.length === 0 || activeCompliances.every(c => (p.compliance || []).includes(c));
 
-      return matchesSearch && matchesCategory && matchesIndustry && matchesGrade && matchesCompliance;
+      return matchesSearch && matchesCategory && matchesIndustry;
     });
-  }, [search, activeCategory, activeIndustries, activeGrades, activeCompliances]);
+  }, [search, activeCategory, activeIndustries]);
 
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
   const paginatedProducts = filteredProducts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
@@ -96,16 +92,12 @@ export default function Products() {
 
   const activeFilters = [
     ...(activeCategory !== 'All' ? [{ type: 'category', value: activeCategory, remove: () => setActiveCategory('All') }] : []),
-    ...activeIndustries.map(i => ({ type: 'industry', value: i, remove: () => toggleFilter(setActiveIndustries, i) })),
-    ...activeGrades.map(g => ({ type: 'grade', value: g, remove: () => toggleFilter(setActiveGrades, g) })),
-    ...activeCompliances.map(c => ({ type: 'compliance', value: c, remove: () => toggleFilter(setActiveCompliances, c) }))
+    ...activeIndustries.map(i => ({ type: 'industry', value: i, remove: () => toggleFilter(setActiveIndustries, i) }))
   ];
 
   const clearAllFilters = () => {
     setActiveCategory('All');
     setActiveIndustries([]);
-    setActiveGrades([]);
-    setActiveCompliances([]);
     setSearch('');
   };
 
@@ -152,40 +144,54 @@ export default function Products() {
           <AnimatePresence>
             {isSidebarOpen && (
               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }} className="overflow-hidden">
-                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm p-5">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-[11px] font-bold text-slate-900 dark:text-white flex items-center gap-2 uppercase tracking-widest"><Filter className="w-3.5 h-3.5 text-slate-500" /> Filter Products</h3>
-                    {activeFilters.length > 0 && (<button onClick={clearAllFilters} className="text-xs font-semibold text-orange-600 hover:text-orange-700 transition-colors">Clear All</button>)}
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-                    {/* Category */}
-                    <div>
-                      <h4 className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2.5">Category</h4>
-                      <div className="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto no-scrollbar">
-                        {categories.map(cat => (<button key={cat} onClick={() => setActiveCategory(cat)} className={cn("px-2.5 py-1.5 text-[11px] font-semibold transition-all border", activeCategory === cat ? "bg-orange-600 text-white border-orange-600" : "bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-orange-500 hover:text-orange-600")}>{cat}</button>))}
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm px-5 py-4">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest shrink-0 flex items-center gap-2">
+                      <Filter className="w-3.5 h-3.5" /> Filter by:
+                    </span>
+                    {/* Category Dropdown */}
+                    <div className="flex flex-col sm:flex-row gap-3 w-full">
+                      <div className="flex-1 relative">
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Category</label>
+                        <select
+                          value={activeCategory}
+                          onChange={(e) => setActiveCategory(e.target.value)}
+                          className="w-full h-10 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[13px] font-medium text-slate-900 dark:text-white px-3 focus:outline-none focus:border-orange-500 transition-colors appearance-none pr-8"
+                        >
+                          {categories.map(cat => (
+                            <option key={cat} value={cat}>{cat}</option>
+                          ))}
+                        </select>
+                        <div className="pointer-events-none absolute right-3 bottom-3 text-slate-400">
+                          <svg className="w-3.5 h-3.5" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5L7 10L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        </div>
+                      </div>
+                      {/* Industry Dropdown */}
+                      <div className="flex-1 relative">
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Industry</label>
+                        <select
+                          value={activeIndustries[0] || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setActiveIndustries(val ? [val] : []);
+                          }}
+                          className="w-full h-10 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[13px] font-medium text-slate-900 dark:text-white px-3 focus:outline-none focus:border-orange-500 transition-colors appearance-none pr-8"
+                        >
+                          <option value="">All Industries</option>
+                          {industries.map(ind => (
+                            <option key={ind} value={ind}>{ind}</option>
+                          ))}
+                        </select>
+                        <div className="pointer-events-none absolute right-3 bottom-3 text-slate-400">
+                          <svg className="w-3.5 h-3.5" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5L7 10L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        </div>
                       </div>
                     </div>
-                    {/* Industry */}
-                    <div>
-                      <h4 className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2.5">Industry</h4>
-                      <div className="space-y-1.5 max-h-40 overflow-y-auto no-scrollbar">
-                        {industries.map(ind => (<label key={ind} className="flex items-center gap-2 cursor-pointer group"><div className="relative flex items-center justify-center"><input type="checkbox" checked={activeIndustries.includes(ind)} onChange={() => toggleFilter(setActiveIndustries, ind)} className="peer w-3.5 h-3.5 appearance-none rounded-sm border-2 border-slate-300 dark:border-slate-600 checked:bg-orange-500 checked:border-orange-500 bg-white dark:bg-slate-800 transition-all cursor-pointer" /><svg className="absolute w-2.5 h-2.5 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></div><span className="text-[12px] font-medium text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors leading-tight">{ind}</span></label>))}
-                      </div>
-                    </div>
-                    {/* Grade */}
-                    <div>
-                      <h4 className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2.5">Grade / Purity</h4>
-                      <div className="space-y-1.5 max-h-40 overflow-y-auto no-scrollbar">
-                        {grades.map(grade => (<label key={grade} className="flex items-center gap-2 cursor-pointer group"><div className="relative flex items-center justify-center"><input type="checkbox" checked={activeGrades.includes(grade)} onChange={() => toggleFilter(setActiveGrades, grade)} className="peer w-3.5 h-3.5 appearance-none rounded-sm border-2 border-slate-300 dark:border-slate-600 checked:bg-orange-500 checked:border-orange-500 bg-white dark:bg-slate-800 transition-all cursor-pointer" /><svg className="absolute w-2.5 h-2.5 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></div><span className="text-[12px] font-medium text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors leading-tight">{grade}</span></label>))}
-                      </div>
-                    </div>
-                    {/* Compliance */}
-                    <div>
-                      <h4 className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2.5">Compliance</h4>
-                      <div className="space-y-1.5 max-h-40 overflow-y-auto no-scrollbar">
-                        {compliances.map(c => (<label key={c} className="flex items-center gap-2 cursor-pointer group"><div className="relative flex items-center justify-center"><input type="checkbox" checked={activeCompliances.includes(c)} onChange={() => toggleFilter(setActiveCompliances, c)} className="peer w-3.5 h-3.5 appearance-none rounded-sm border-2 border-slate-300 dark:border-slate-600 checked:bg-orange-500 checked:border-orange-500 bg-white dark:bg-slate-800 transition-all cursor-pointer" /><svg className="absolute w-2.5 h-2.5 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></div><span className="text-[12px] font-medium text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors leading-tight">{c}</span></label>))}
-                      </div>
-                    </div>
+                    {activeFilters.length > 0 && (
+                      <button onClick={clearAllFilters} className="shrink-0 text-xs font-semibold text-orange-600 hover:text-orange-700 transition-colors whitespace-nowrap">
+                        Clear All
+                      </button>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -291,18 +297,7 @@ export default function Products() {
                             </div>
                           </div>
 
-                          <div className="flex flex-wrap gap-1.5 pt-2">
-                            {(product.compliance || []).filter((c: string) => c !== "REACH").slice(0, 3).map((c: string, cIdx: number) => (
-                              <span key={`comp-${c}-${cIdx}`} className="text-[10px] font-semibold border border-slate-200 dark:border-slate-700 px-1.5 py-0.5 text-slate-500 dark:text-slate-400 flex items-center gap-1 bg-slate-50 dark:bg-slate-800">
-                                <ShieldCheck className="w-3 h-3 text-slate-400" /> {c}
-                              </span>
-                            ))}
-                            {(product.compliance || []).filter((c: string) => c !== "REACH").length > 3 && (
-                              <span className="text-[10px] font-semibold border border-slate-200 dark:border-slate-700 px-1.5 py-0.5 text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800">
-                                +{(product.compliance || []).filter((c: string) => c !== "REACH").length - 3}
-                              </span>
-                            )}
-                          </div>
+
                         </div>
 
                         <div className="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-3 relative z-30">

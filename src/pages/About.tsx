@@ -264,19 +264,18 @@ export default function About() {
               <p className="text-[14px] text-slate-600 leading-relaxed font-medium mb-6">
                 Our strategic location in Milan allows us to efficiently manage supply chains across Europe and coordinate global shipments with precision.
               </p>
-              <div className="w-full h-48 bg-slate-100 rounded-sm overflow-hidden relative border border-slate-200">
-                <img
-                  src="https://images.unsplash.com/photo-1513622470522-26c314a85ee8?auto=format&fit=crop&q=80&w=800"
-                  alt="Milan, Italy"
-                  className="w-full h-full object-cover opacity-90"
-                  referrerPolicy="no-referrer"
+              <div className="w-full h-48 rounded-sm overflow-hidden relative border border-slate-200">
+                <iframe
+                  title="SoleChem Headquarters"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2796.7!2d9.3618!3d45.5232!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4786c7b6e1e1e1e1%3A0x1!2sVia+Leonardo+da+Vinci+9%2C+20051+Cassina+de%27Pecchi+MI%2C+Italy!5e0!3m2!1sen!2sit!4v1"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen={false}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-full"
                 />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-sm border border-slate-200 shadow-sm text-[13px] font-bold flex items-center gap-2 text-slate-900">
-                    <span className="w-2 h-2 bg-orange-600 rounded-full animate-pulse" />
-                    SoleChem S.R.L.
-                  </div>
-                </div>
               </div>
             </div>
           </div>

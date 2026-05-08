@@ -202,7 +202,7 @@ export default function Contact() {
             <div className="bg-slate-900 p-8 rounded-sm text-white space-y-8 shadow-sm">
               <h4 className="text-[10px] font-bold text-orange-500 uppercase tracking-[0.2em] border-b border-slate-800 pb-2">Direct Contact</h4>
               <div className="space-y-6">
-                <div className="flex gap-4">
+                <a href="tel:+390230556150" className="flex gap-4 hover:opacity-80 transition-opacity">
                   <div className="w-10 h-10 bg-slate-800 rounded-sm flex items-center justify-center text-orange-500 shrink-0 border border-slate-700">
                     <Phone className="w-5 h-5" />
                   </div>
@@ -211,8 +211,8 @@ export default function Contact() {
                     <p className="text-[15px] font-bold">+39 02 3055 6150</p>
                     <p className="text-[11px] text-slate-500 font-medium mt-1">Mon–Fri 9–18 CET</p>
                   </div>
-                </div>
-                <div className="flex gap-4">
+                </a>
+                <a href="mailto:info@solechem.eu" className="flex gap-4 hover:opacity-80 transition-opacity">
                   <div className="w-10 h-10 bg-slate-800 rounded-sm flex items-center justify-center text-orange-500 shrink-0 border border-slate-700">
                     <Mail className="w-5 h-5" />
                   </div>
@@ -221,7 +221,7 @@ export default function Contact() {
                     <p className="text-[15px] font-bold text-orange-400">info@solechem.eu</p>
                     <p className="text-[11px] text-slate-500 font-medium mt-1">24h guaranteed response</p>
                   </div>
-                </div>
+                </a>
               </div>
 
               <div className="bg-[#25D366]/10 border border-[#25D366]/20 p-5 rounded-sm space-y-3">

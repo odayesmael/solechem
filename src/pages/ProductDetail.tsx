@@ -400,9 +400,9 @@ export default function ProductDetail() {
                   <a href="mailto:info@solechem.eu" className="flex-1 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-sm p-2 flex items-center justify-center transition-colors border border-slate-200 dark:border-slate-700">
                     <Mail className="w-4 h-4 text-slate-600 dark:text-slate-400" />
                   </a>
-                  <button className="flex-1 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-sm p-2 flex items-center justify-center transition-colors border border-slate-200 dark:border-slate-700">
+                  <a href="https://wa.me/390230556150" target="_blank" rel="noopener noreferrer" className="flex-1 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-sm p-2 flex items-center justify-center transition-colors border border-slate-200 dark:border-slate-700">
                     <MessageCircle className="w-4 h-4 text-slate-600 dark:text-slate-400" />
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>

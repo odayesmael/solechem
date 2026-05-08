@@ -247,7 +247,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <a href="https://maps.app.goo.gl/8kJXoJaUGnTQPwLu5" target="_blank" rel="noopener noreferrer" className="block bg-slate-50 p-6 rounded-sm border border-slate-200 space-y-5 shadow-sm hover:border-orange-500 transition-all group">
+            <a href="https://www.google.com/maps/search/Via+Leonardo+da+Vinci+9,+20051+Cassina+de+Pecchi+MI+Italy" target="_blank" rel="noopener noreferrer" className="block bg-slate-50 p-6 rounded-sm border border-slate-200 space-y-5 shadow-sm hover:border-orange-500 transition-all group">
               <h4 className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.2em] border-b border-slate-200 pb-2">Our Location</h4>
               <div className="aspect-video bg-slate-200 rounded-sm overflow-hidden relative border border-slate-300">
                 <img 

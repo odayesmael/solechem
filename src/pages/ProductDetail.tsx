@@ -386,10 +386,10 @@ export default function ProductDetail() {
                 <h5 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Technical Support</h5>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 font-bold rounded-sm">
-                    OA
+                    SC
                   </div>
                   <div>
-                    <p className="text-[13px] font-bold text-slate-900 dark:text-white">Oday Alatbash</p>
+                    <p className="text-[13px] font-bold text-slate-900 dark:text-white">SoleChem</p>
                     <p className="text-[10px] text-slate-500 uppercase font-semibold tracking-widest mt-0.5">Sector Specialist</p>
                   </div>
                 </div>

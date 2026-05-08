@@ -79,10 +79,9 @@ export default function About() {
           <div className="relative">
             <div className="absolute inset-0 bg-slate-100 rounded-sm transform rotate-3 scale-105 opacity-50" />
             <img
-              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000"
-              alt="Global Chemical Distribution"
+              src="/about-hero.png"
+              alt="SoleChem Chemical Distribution Facility"
               className="relative rounded-sm object-cover w-full h-[500px] shadow-sm border border-slate-200"
-              referrerPolicy="no-referrer"
             />
           </div>
         </div>

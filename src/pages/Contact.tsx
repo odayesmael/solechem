@@ -247,30 +247,31 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="bg-slate-50 p-6 rounded-sm border border-slate-200 space-y-5 shadow-sm">
+            <a href="https://maps.app.goo.gl/8kJXoJaUGnTQPwLu5" target="_blank" rel="noopener noreferrer" className="block bg-slate-50 p-6 rounded-sm border border-slate-200 space-y-5 shadow-sm hover:border-orange-500 transition-all group">
               <h4 className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.2em] border-b border-slate-200 pb-2">Our Location</h4>
               <div className="aspect-video bg-slate-200 rounded-sm overflow-hidden relative border border-slate-300">
                 <img 
                   src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=800" 
                   alt="Milan Map" 
-                  className="w-full h-full object-cover opacity-80"
+                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-8 h-8 bg-orange-600 rounded-sm flex items-center justify-center text-white shadow-sm border border-orange-700">
+                  <div className="w-8 h-8 bg-orange-600 rounded-sm flex items-center justify-center text-white shadow-sm border border-orange-700 group-hover:scale-110 transition-transform">
                     <MapPin className="w-4 h-4" />
                   </div>
                 </div>
               </div>
-              <div className="space-y-1 bg-white p-4 rounded-sm border border-slate-200 shadow-sm">
+              <div className="space-y-1 bg-white p-4 rounded-sm border border-slate-200 shadow-sm group-hover:border-orange-200 transition-colors">
                 <p className="text-[14px] font-bold text-slate-900">SoleChem S.R.L.</p>
                 <p className="text-[13px] text-slate-600 leading-relaxed font-medium">
                   Via Leonardo da Vinci 9<br />
                   20051 Cassina de'Pecchi (MI)<br />
                   Italy
                 </p>
+                <p className="text-[11px] font-bold text-orange-600 uppercase tracking-widest pt-2">Open in Google Maps →</p>
               </div>
-            </div>
+            </a>
           </aside>
         </div>
       </section>

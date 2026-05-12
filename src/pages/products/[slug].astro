@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProductDetailClient from '../../components/react/ProductDetailClient.tsx';
-import { PRODUCTS } from '../../data';
+import { PRODUCTS, INDUSTRIES } from '../../data';
 
 const slug = Astro.params.slug;
 const product = PRODUCTS.find(p => p.slug === slug);
@@ -9,6 +9,13 @@ const product = PRODUCTS.find(p => p.slug === slug);
 if (!product) {
   return Astro.redirect('/products');
 }
+
+// Prepare lightweight data for client hydration (avoid shipping 18MB to browser)
+const industriesLite = INDUSTRIES.map(i => ({ name: i.name, slug: i.slug }));
+const similarProductsResolved = (product.similarProducts || []).map((s: string) => {
+  const sp = PRODUCTS.find(p => p.slug === s);
+  return sp ? { id: sp.id, name: sp.name, slug: sp.slug, cas: sp.cas, ec: sp.ec } : null;
+}).filter(Boolean);
 ---
 
 <BaseLayout title={`${product.name} | SoleChem Europe`} description={product.description?.substring(0, 160) || `${product.name} - CAS ${product.cas}. Request a quote from SoleChem Europe.`}>
@@ -45,5 +52,5 @@ if (!product) {
     }
   })} />
 
-  <ProductDetailClient client:load product={product} />
+  <ProductDetailClient client:load product={product} industries={industriesLite} similarProducts={similarProductsResolved} />
 </BaseLayout>

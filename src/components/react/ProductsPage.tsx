@@ -1,29 +1,56 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Search, Filter, Grid, List, ArrowRight, ChevronRight, ChevronLeft, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { PRODUCTS } from '@/data';
 import { cn } from '@/lib/utils';
 
-export default function ProductsPage() {
-  // Read initial values from URL
-  const getParams = () => new URLSearchParams(window.location.search);
+interface ProductLite {
+  id: string;
+  name: string;
+  slug: string;
+  cas: string;
+  formula: string;
+  category: string;
+  industry: string[];
+  description: string;
+}
+
+interface Props {
+  products: ProductLite[];
+}
+
+export default function ProductsPage({ products: PRODUCTS }: Props) {
+  // Read initial values from URL (guard for SSR where window is undefined)
+  const getParams = () => {
+    if (typeof window === 'undefined') return new URLSearchParams();
+    return new URLSearchParams(window.location.search);
+  };
 
   const [view, setView] = useState<'grid' | 'list'>('list');
-  const [search, setSearch] = useState(() => getParams().get('q') || '');
+  const [search, setSearch] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   // Filter States
-  const [activeCategory, setActiveCategory] = useState(() => getParams().get('category') || 'All');
-  const [activeIndustries, setActiveIndustries] = useState<string[]>(() => {
-    const ind = getParams().get('industry');
-    return ind ? [ind] : [];
-  });
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [activeIndustries, setActiveIndustries] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const [currentPage, setCurrentPage] = useState(() => parseInt(getParams().get('page') || '1', 10));
+  // Read URL params on client mount
+  useEffect(() => {
+    const params = getParams();
+    const q = params.get('q');
+    const cat = params.get('category');
+    const ind = params.get('industry');
+    const page = params.get('page');
+    if (q) setSearch(q);
+    if (cat) setActiveCategory(cat);
+    if (ind) setActiveIndustries([ind]);
+    if (page) setCurrentPage(parseInt(page, 10));
+  }, []);
   const ITEMS_PER_PAGE = 50;
 
   // Sync URL params without full page reload
   const updateURL = (params: Record<string, string | null>) => {
+    if (typeof window === 'undefined') return;
     const url = new URL(window.location.href);
     for (const [key, value] of Object.entries(params)) {
       if (value) {

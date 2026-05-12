@@ -32,6 +32,7 @@ export default function ProductsPage({ products: PRODUCTS }: Props) {
   // Filter States
   const [activeCategory, setActiveCategory] = useState('All');
   const [activeIndustries, setActiveIndustries] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState('name-asc');
   const [currentPage, setCurrentPage] = useState(1);
 
   // Read URL params on client mount
@@ -82,7 +83,7 @@ export default function ProductsPage({ products: PRODUCTS }: Props) {
   };
 
   const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter(p => {
+    const filtered = PRODUCTS.filter(p => {
       const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) ||
                            (p.cas || "").includes(search) ||
                            p.category.toLowerCase().includes(search.toLowerCase());
@@ -93,7 +94,25 @@ export default function ProductsPage({ products: PRODUCTS }: Props) {
 
       return matchesSearch && matchesCategory && matchesIndustry;
     });
-  }, [search, activeCategory, activeIndustries]);
+
+    // Sort
+    const sorted = [...filtered];
+    switch (sortBy) {
+      case 'name-asc':
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'name-desc':
+        sorted.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case 'cas':
+        sorted.sort((a, b) => a.cas.localeCompare(b.cas));
+        break;
+      case 'category':
+        sorted.sort((a, b) => a.category.localeCompare(b.category) || a.name.localeCompare(b.name));
+        break;
+    }
+    return sorted;
+  }, [search, activeCategory, activeIndustries, sortBy]);
 
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
   const paginatedProducts = filteredProducts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
@@ -238,10 +257,15 @@ export default function ProductsPage({ products: PRODUCTS }: Props) {
               <p className="text-[13px] font-medium text-slate-600 dark:text-slate-400">
                 <span className="text-slate-900 dark:text-white font-bold">{filteredProducts.length}</span> products matching your criteria
               </p>
-              <select className="bg-transparent border-none text-[13px] font-medium text-slate-900 dark:text-white focus:ring-0 cursor-pointer outline-none dark:bg-slate-900 p-0 hover:text-orange-600 transition-colors">
-                <option>Sort: Name A-Z</option>
-                <option>Sort: Most Requested</option>
-                <option>Sort: Newest</option>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="bg-transparent border-none text-[13px] font-medium text-slate-900 dark:text-white focus:ring-0 cursor-pointer outline-none dark:bg-slate-900 p-0 hover:text-orange-600 transition-colors"
+              >
+                <option value="name-asc">Sort: Name A-Z</option>
+                <option value="name-desc">Sort: Name Z-A</option>
+                <option value="cas">Sort: CAS Number</option>
+                <option value="category">Sort: Category</option>
               </select>
             </div>
 

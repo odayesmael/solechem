@@ -38,27 +38,40 @@ const featuredIndustries = INDUSTRIES.slice(0, 8);
       <div class="absolute inset-0 z-0 overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-slate-950/40 to-slate-950/10 z-10"></div>
         <img
+          id="hero-bg-img"
           src="/slider.webp"
           alt="SoleChem Industrial Plant"
           class="w-full h-full object-cover opacity-80"
+          style="animation: heroZoom 30s ease-in-out infinite alternate;"
         />
         <!-- Decorative Elements -->
         <div class="absolute top-1/4 right-1/4 w-96 h-96 bg-orange-600/20 rounded-full blur-[120px] z-10 pointer-events-none"></div>
         <div class="absolute bottom-1/4 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] z-10 pointer-events-none"></div>
 
-        <!-- Static floating chemical elements (decorative) -->
-        <div class="absolute inset-0 z-10 pointer-events-none">
-          <div class="absolute text-white opacity-[0.08]" style="top: 15%; left: 10%;">
+        <!-- Floating chemical elements with parallax -->
+        <div id="hero-floating" class="absolute inset-0 z-10 pointer-events-none transition-transform duration-700 ease-out">
+          <!-- Hexagon icons -->
+          <div class="hero-float absolute text-white opacity-0 transition-opacity duration-700" style="top: 15%; left: 10%;" data-dur="15" data-delay="0">
             <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
           </div>
-          <span class="absolute text-white font-black tracking-tighter opacity-[0.08]" style="top: 25%; left: 80%; font-size: 64px;">H&#8322;O</span>
-          <div class="absolute text-white opacity-[0.08]" style="top: 65%; left: 15%;">
+          <div class="hero-float absolute text-white opacity-0 transition-opacity duration-700" style="top: 65%; left: 15%;" data-dur="20" data-delay="1">
             <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
           </div>
-          <span class="absolute text-white font-black tracking-tighter opacity-[0.08]" style="top: 75%; left: 85%; font-size: 72px;">CO&#8322;</span>
-          <span class="absolute text-white font-black tracking-tighter opacity-[0.08]" style="top: 15%; left: 60%; font-size: 56px;">CH&#8324;</span>
-          <span class="absolute text-white font-black tracking-tighter opacity-[0.08]" style="top: 45%; left: 20%; font-size: 48px;">NH&#8323;</span>
-          <span class="absolute text-white font-black tracking-tighter opacity-[0.08]" style="top: 60%; left: 70%; font-size: 50px;">O&#8322;</span>
+          <div class="hero-float absolute text-white opacity-0 transition-opacity duration-700" style="top: 40%; left: 50%;" data-dur="14" data-delay="0.5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <div class="hero-float absolute text-white opacity-0 transition-opacity duration-700" style="top: 80%; left: 35%;" data-dur="17" data-delay="2.5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <div class="hero-float absolute text-white opacity-0 transition-opacity duration-700" style="top: 20%; left: 40%;" data-dur="12" data-delay="1.2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <!-- Chemical formulas -->
+          <span class="hero-float absolute text-white font-black tracking-tighter opacity-0 transition-opacity duration-700" style="top: 25%; left: 80%; font-size: 64px;" data-dur="18" data-delay="2">H&#8322;O</span>
+          <span class="hero-float absolute text-white font-black tracking-tighter opacity-0 transition-opacity duration-700" style="top: 75%; left: 85%; font-size: 72px;" data-dur="16" data-delay="3">CO&#8322;</span>
+          <span class="hero-float absolute text-white font-black tracking-tighter opacity-0 transition-opacity duration-700" style="top: 15%; left: 60%; font-size: 56px;" data-dur="22" data-delay="1.5">CH&#8324;</span>
+          <span class="hero-float absolute text-white font-black tracking-tighter opacity-0 transition-opacity duration-700" style="top: 45%; left: 20%; font-size: 48px;" data-dur="19" data-delay="0.8">NH&#8323;</span>
+          <span class="hero-float absolute text-white font-black tracking-tighter opacity-0 transition-opacity duration-700" style="top: 60%; left: 70%; font-size: 50px;" data-dur="25" data-delay="0.2">O&#8322;</span>
         </div>
       </div>
 
@@ -482,10 +495,69 @@ const featuredIndustries = INDUSTRIES.slice(0, 8);
       const btn = document.getElementById('open-quote-modal');
       if (btn) {
         btn.addEventListener('click', () => {
-          // Dispatch a custom event that the QuoteModal can listen to
           window.dispatchEvent(new CustomEvent('open-quote-modal'));
         });
       }
     });
+  </script>
+
+  <!-- Hero floating elements: parallax + float animation -->
+  <style>
+    @keyframes heroZoom {
+      0% { transform: scale(1) translate(0, 0); }
+      100% { transform: scale(1.15) translate(-2%, -1%); }
+    }
+    @keyframes heroFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-40px) rotate(15deg); }
+    }
+  </style>
+  <script>
+    (function() {
+      const hero = document.querySelector('section.relative.min-h-\\[95vh\\]');
+      const container = document.getElementById('hero-floating');
+      const elements = document.querySelectorAll('.hero-float');
+      if (!hero || !container || !elements.length) return;
+
+      // Start float animations per element
+      elements.forEach((el) => {
+        const dur = parseFloat(el.getAttribute('data-dur') || '16');
+        const delay = parseFloat(el.getAttribute('data-delay') || '0');
+        el.style.animation = `heroFloat ${dur}s ease-in-out ${delay}s infinite`;
+      });
+
+      // Fade in on hover / scroll
+      let visible = false;
+      function show() {
+        if (visible) return;
+        visible = true;
+        elements.forEach(el => el.style.opacity = '0.15');
+      }
+      function hide() {
+        visible = false;
+        elements.forEach(el => el.style.opacity = '0');
+      }
+
+      hero.addEventListener('mouseenter', show);
+      hero.addEventListener('mouseleave', hide);
+
+      // Also show on scroll
+      const onScroll = () => {
+        if (window.scrollY > 20) show();
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      // Parallax: move container with mouse
+      hero.addEventListener('mousemove', (e) => {
+        const x = ((e as MouseEvent).clientX / window.innerWidth - 0.5) * 40;
+        const y = ((e as MouseEvent).clientY / window.innerHeight - 0.5) * 40;
+        container.style.transform = `translate(${x}px, ${y}px)`;
+      });
+
+      hero.addEventListener('mouseleave', () => {
+        container.style.transform = 'translate(0, 0)';
+      });
+    })();
   </script>
 </BaseLayout>

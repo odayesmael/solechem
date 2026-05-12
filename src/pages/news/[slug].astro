@@ -44,6 +44,10 @@ const paragraphs = post.content.split('\n\n').filter(p => p.trim());
         alt={post.title}
         class="w-full h-full object-cover"
         referrerpolicy="no-referrer"
+        fetchpriority="high"
+        decoding="async"
+        width="1200"
+        height="600"
       />
       <div class="absolute inset-0 z-20 flex items-end">
         <div class="max-w-4xl mx-auto px-4 lg:px-8 pb-12 w-full">
@@ -155,7 +159,7 @@ const paragraphs = post.content.split('\n\n').filter(p => p.trim());
             {relatedPosts.map((item) => (
               <a href={`/news/${item.slug}`} class="group bg-white rounded-sm border border-slate-200 overflow-hidden hover:border-orange-500 hover:shadow-lg transition-all duration-300 flex flex-col">
                 <div class="relative h-48 overflow-hidden">
-                  <img src={item.image} alt={item.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" referrerpolicy="no-referrer" />
+                  <img src={item.image} alt={item.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" referrerpolicy="no-referrer" loading="lazy" decoding="async" width="400" height="192" />
                 </div>
                 <div class="p-5 flex flex-col flex-1">
                   <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">{new Date(item.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>

@@ -20,5 +20,5 @@ const newsLite = NEWS_ITEMS.map(n => ({
 ---
 
 <BaseLayout title="News & Insights | SoleChem Europe" description="Stay informed with the latest company announcements, industry analysis, product launches, and upcoming events from SoleChem Europe.">
-  <NewsPage client:load news={newsLite} />
+  <NewsPage client:idle news={newsLite} />
 </BaseLayout>

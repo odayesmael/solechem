@@ -1,26 +1,59 @@
-# SoleChem EU | B2B Chemical Supplier and Manufacturer
+# SoleChem Europe — B2B Chemical Distribution Platform
 
-This platform is the core digital interface for **SoleChem EU**, a premier B2B supplier and manufacturer of industrial chemicals. The system is built using a hybrid architecture: **Astro (SSR)** for high-performance data handling and **React** for advanced interactive animations.
+Corporate website for **SoleChem Europe S.r.l.**, a B2B chemical distributor and manufacturer headquartered in Milan, Italy. The platform serves as the primary digital presence for product discovery, industry solutions, and commercial inquiries across 50+ countries.
 
-## Project Overview
-The application functions as a high-speed hub for managing complex chemical datasets. By leveraging Astro's islands architecture, we maintain a lightweight core while using React to power sophisticated UI animations and interactive components for an enhanced user experience.
+## Tech Stack
 
----
+- **Framework:** Astro 5 (SSR) with React Islands
+- **Styling:** Tailwind CSS v4
+- **Deployment:** Vercel (auto-deploy from `main`)
+- **Domain:** [www.solechem.eu](https://www.solechem.eu)
 
-## Technical Stack & Deployment
+## Getting Started
 
-### Architecture
-*   **Astro (SSR):** Handles the primary routing, data fetching, and static content.
-*   **React:** Utilized for high-fidelity animations and stateful UI components.
-*   **Server-Side Rendering:** Ensures real-time access to manufacturing and logistical data.
+**Prerequisites:** Node.js 18+
 
-### Prerequisites
-* **Node.js** (Latest LTS)
-* Authorized System Credentials
+```bash
+npm install
+npm run dev
+```
 
-### Setup and Installation
+The dev server starts at `http://localhost:4321`.
 
-1. **Initialize Environment:**
-   Install dependencies using npm:
-   ```bash
-   npm install
+## Project Structure
+
+```
+src/
+├── components/react/   # Interactive React islands
+├── data/               # Product catalog, industries, categories, news
+├── layouts/            # Base layout with SEO, structured data
+├── pages/              # Astro file-based routing
+│   ├── products/       # Product catalog + detail pages (4,500+ products)
+│   ├── industries/     # Industry landing pages (20 sectors)
+│   ├── news/           # News listing + article pages
+│   └── ...
+└── styles/             # Global CSS + Tailwind theme
+public/                 # Static assets (images, favicon, robots.txt)
+```
+
+## Build
+
+```bash
+npm run build    # Production build (SSR + static assets)
+npm run preview  # Preview production build locally
+```
+
+## Key Features
+
+- Full product catalog with CAS search, category/industry filtering
+- Individual product pages with safety data, physical properties, trade info
+- Industry-specific landing pages with relevant product listings
+- News & insights section
+- Contact and quote request forms
+- ISO 9001:2015 & ISO 22000:2018 certified operations
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `GEMINI_API_KEY` | Google Gemini API key (for chatbot assistant) |

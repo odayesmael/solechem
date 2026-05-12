@@ -1,21 +1,26 @@
 # SoleChem EU | B2B Chemical Supplier and Manufacturer
 
-This repository contains the professional interface for **SoleChem EU**, a leading B2B supplier and manufacturer of industrial chemicals. This system is engineered to optimize technical data management, manufacturing specifications, and wholesale distribution workflows.
+This platform is the core digital interface for **SoleChem EU**, a premier B2B supplier and manufacturer of industrial chemicals. The system is built using a hybrid architecture: **Astro (SSR)** for high-performance data handling and **React** for advanced interactive animations.
 
 ## Project Overview
-This platform acts as a centralized data hub for our manufacturing and supply operations. It enables efficient access to chemical compositions, CAS registry data, and industrial safety standards across our product catalog.
+The application functions as a high-speed hub for managing complex chemical datasets. By leveraging Astro's islands architecture, we maintain a lightweight core while using React to power sophisticated UI animations and interactive components for an enhanced user experience.
 
 ---
 
-## Technical Deployment
+## Technical Stack & Deployment
+
+### Architecture
+*   **Astro (SSR):** Handles the primary routing, data fetching, and static content.
+*   **React:** Utilized for high-fidelity animations and stateful UI components.
+*   **Server-Side Rendering:** Ensures real-time access to manufacturing and logistical data.
 
 ### Prerequisites
-* **Node.js** (Current LTS version)
+* **Node.js** (Latest LTS)
 * Authorized System Credentials
 
 ### Setup and Installation
 
 1. **Initialize Environment:**
-   Install the required dependencies via the terminal:
+   Install dependencies using npm:
    ```bash
    npm install

@@ -34,7 +34,11 @@ const canonicalUrl = canonical || `${siteUrl}${currentPath}`;
     <link rel="canonical" href={canonicalUrl} />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/favicon .png" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <!-- Robots -->
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />

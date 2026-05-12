@@ -24,10 +24,10 @@ const similarProductsResolved = (product.similarProducts || []).map((s: string) 
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://solechem.com/" },
-      { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://solechem.com/products" },
-      { "@type": "ListItem", "position": 3, "name": product.category, "item": `https://solechem.com/products?category=${encodeURIComponent(product.category)}` },
-      { "@type": "ListItem", "position": 4, "name": product.name, "item": `https://solechem.com/products/${product.slug}` }
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.solechem.eu/" },
+      { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://www.solechem.eu/products" },
+      { "@type": "ListItem", "position": 3, "name": product.category, "item": `https://www.solechem.eu/products?category=${encodeURIComponent(product.category)}` },
+      { "@type": "ListItem", "position": 4, "name": product.name, "item": `https://www.solechem.eu/products/${product.slug}` }
     ]
   })} />
   <script type="application/ld+json" set:html={JSON.stringify({
@@ -35,7 +35,7 @@ const similarProductsResolved = (product.similarProducts || []).map((s: string) 
     "@type": "Product",
     "name": product.name,
     "description": product.description?.substring(0, 200),
-    "url": `https://solechem.com/products/${product.slug}`,
+    "url": `https://www.solechem.eu/products/${product.slug}`,
     "category": product.category,
     "brand": { "@type": "Brand", "name": "SoleChem" },
     "identifier": product.cas,

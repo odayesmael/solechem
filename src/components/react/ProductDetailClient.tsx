@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Copy, Check, ShieldCheck, Phone, Mail, MessageCircle, ArrowRight } from 'lucide-react';
+import { ChevronRight, Copy, Check, ShieldCheck, Phone, Mail, MessageCircle, ArrowRight, FlaskConical, AlertTriangle, Scale, Thermometer, Droplets, Atom } from 'lucide-react';
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import QuoteModal from '@/components/react/QuoteModal';
@@ -204,84 +204,148 @@ export default function ProductDetailClient({ product, industries: INDUSTRIES, s
 
                 {/* Physical Properties Section */}
                 {product.physicalProperties && (
-                <div id="physical-properties" className="bg-white dark:bg-slate-900 p-8 border border-slate-200 dark:border-slate-800 scroll-mt-36">
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Physical Properties</h3>
-                  <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 leading-relaxed text-[15px]">
-                    <p>
-                      {(() => {
-                        const text = product.physicalProperties || '';
-                        if (!text) return 'Information not available.';
-                        const parts = text.split(';');
-                        return parts.map((part: string, i: number) => {
-                          const colonIdx = part.indexOf(':');
-                          if (colonIdx > 0) {
-                            const label = part.substring(0, colonIdx);
-                            const value = part.substring(colonIdx);
-                            return (
-                              <span key={i}>
-                                {i > 0 && '; '}
-                                <strong className="font-bold text-slate-800 dark:text-white">{label.trim()}</strong>
-                                {value}
-                              </span>
-                            );
-                          }
-                          return <span key={i}>{i > 0 ? '; ' : ''}{part}</span>;
-                        });
-                      })()}
-                    </p>
+                <div id="physical-properties" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 scroll-mt-36 overflow-hidden">
+                  <div className="flex items-center gap-3 px-8 py-5 bg-gradient-to-r from-orange-50 to-orange-100/50 dark:from-orange-950/30 dark:to-slate-900 border-b border-orange-200 dark:border-orange-900/40">
+                    <div className="w-9 h-9 rounded-lg bg-orange-600 flex items-center justify-center">
+                      <FlaskConical className="w-[18px] h-[18px] text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Physical Properties</h3>
+                  </div>
+                  <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                    {(() => {
+                      const text = product.physicalProperties || '';
+                      if (!text) return <div className="px-8 py-4 text-slate-500">Information not available.</div>;
+                      const parts = text.split(';').filter((p: string) => p.trim());
+                      return parts.map((part: string, i: number) => {
+                        const colonIdx = part.indexOf(':');
+                        if (colonIdx > 0) {
+                          const label = part.substring(0, colonIdx).trim();
+                          const value = part.substring(colonIdx + 1).trim();
+                          const iconMap: Record<string, React.ReactNode> = {
+                            'Melting Point': <Thermometer className="w-4 h-4 text-orange-500" />,
+                            'Boiling Point': <Thermometer className="w-4 h-4 text-red-500" />,
+                            'Density': <Droplets className="w-4 h-4 text-blue-500" />,
+                            'Water Solubility': <Droplets className="w-4 h-4 text-cyan-500" />,
+                          };
+                          const icon = iconMap[label] || <Atom className="w-4 h-4 text-slate-400 dark:text-slate-500" />;
+                          return (
+                            <div key={i} className={`flex items-center gap-4 px-8 py-3.5 ${i % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-50/70 dark:bg-slate-800/30'} hover:bg-orange-50/40 dark:hover:bg-orange-950/10 transition-colors`}>
+                              <span className="shrink-0">{icon}</span>
+                              <span className="font-semibold text-slate-700 dark:text-slate-300 min-w-[160px] text-sm">{label}</span>
+                              <span className="text-slate-900 dark:text-white text-sm font-medium">{value}</span>
+                            </div>
+                          );
+                        }
+                        return <div key={i} className="px-8 py-3.5 text-slate-600 dark:text-slate-400 text-sm">{part.trim()}</div>;
+                      });
+                    })()}
                   </div>
                 </div>
                 )}
 
                 {/* Safety & Handling Section */}
                 {product.safetyHandling && (
-                <div id="safety-handling" className="bg-white dark:bg-slate-900 p-8 border border-slate-200 dark:border-slate-800 scroll-mt-36">
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Safety & Handling</h3>
-                  <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 leading-relaxed text-[15px]">
-                    <p>
-                      {(() => {
-                        const text = product.safetyHandling || 'Information not available.';
-                        if (text === 'Information not available.') return text;
-                        const pattern = /(Danger|Warning|Hazard Statements|Precautionary Statements|GHS\d{2}|H\d{3}|P\d{3}(?:\+P\d{3})*)/g;
-                        const parts = text.split(pattern);
-                        return parts.map((part: string, i: number) =>
-                          pattern.test(part)
-                            ? <strong key={i} className="font-bold text-slate-800 dark:text-white">{part}</strong>
-                            : part
-                        );
-                      })()}
-                    </p>
+                <div id="safety-handling" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 scroll-mt-36 overflow-hidden">
+                  <div className="flex items-center gap-3 px-8 py-5 bg-gradient-to-r from-orange-50 to-orange-100/50 dark:from-orange-950/30 dark:to-slate-900 border-b border-orange-200 dark:border-orange-900/40">
+                    <div className="w-9 h-9 rounded-lg bg-orange-600 flex items-center justify-center">
+                      <AlertTriangle className="w-[18px] h-[18px] text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Safety & Handling</h3>
+                  </div>
+                  <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                    {(() => {
+                      const text = product.safetyHandling || '';
+                      if (!text) return <div className="px-8 py-4 text-slate-500">Information not available.</div>;
+                      const parts = text.split(';').filter((p: string) => p.trim());
+                      return parts.map((part: string, i: number) => {
+                        const colonIdx = part.indexOf(':');
+                        if (colonIdx > 0) {
+                          const label = part.substring(0, colonIdx).trim();
+                          const value = part.substring(colonIdx + 1).trim();
+                          // Signal word badges
+                          const isSignalWord = label === 'Signal Word';
+                          const isDanger = isSignalWord && value.toLowerCase() === 'danger';
+                          const isWarning = isSignalWord && value.toLowerCase() === 'warning';
+                          // GHS/H/P code badges
+                          const isGHS = label.includes('GHS') || label.includes('Pictogram');
+                          const isHazard = label.includes('Hazard');
+                          const isPrecautionary = label.includes('Precautionary');
+                          return (
+                            <div key={i} className={`flex items-start gap-4 px-8 py-3.5 ${i % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-50/70 dark:bg-slate-800/30'} hover:bg-orange-50/40 dark:hover:bg-orange-950/10 transition-colors`}>
+                              <span className="shrink-0 mt-0.5">
+                                <ShieldCheck className="w-4 h-4 text-orange-500" />
+                              </span>
+                              <span className="font-semibold text-slate-700 dark:text-slate-300 min-w-[180px] text-sm shrink-0">{label}</span>
+                              <div className="flex flex-wrap gap-1.5">
+                                {isSignalWord ? (
+                                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${isDanger ? 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400' : isWarning ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}`}>
+                                    {value}
+                                  </span>
+                                ) : (isGHS || isHazard || isPrecautionary) ? (
+                                  value.split(/[,;]/).map((code: string, ci: number) => (
+                                    <span key={ci} className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-mono font-medium ${isGHS ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' : isHazard ? 'bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400 border border-red-200 dark:border-red-800' : 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 border border-blue-200 dark:border-blue-800'}`}>
+                                      {code.trim()}
+                                    </span>
+                                  ))
+                                ) : (
+                                  <span className="text-slate-900 dark:text-white text-sm font-medium">{value}</span>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        }
+                        return <div key={i} className="px-8 py-3.5 text-slate-600 dark:text-slate-400 text-sm">{part.trim()}</div>;
+                      });
+                    })()}
                   </div>
                 </div>
                 )}
 
                 {/* Trade & Regulatory Section */}
                 {product.tradeRegulatory && (
-                <div id="trade-regulatory" className="bg-white dark:bg-slate-900 p-8 border border-slate-200 dark:border-slate-800 scroll-mt-36">
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Trade & Regulatory</h3>
-                  <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 leading-relaxed text-[15px]">
-                    <p>
-                      {(() => {
-                        const text = product.tradeRegulatory || 'Information not available.';
-                        if (text === 'Information not available.') return text;
-                        const parts = text.split(';');
-                        return parts.map((part: string, i: number) => {
-                          const colonIdx = part.indexOf(':');
-                          if (colonIdx > 0) {
-                            const label = part.substring(0, colonIdx);
-                            const value = part.substring(colonIdx);
-                            return (
-                              <span key={i}>
-                                {i > 0 && '; '}
-                                <strong className="font-bold text-slate-800 dark:text-white">{label.trim()}</strong>
-                                {value}
+                <div id="trade-regulatory" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 scroll-mt-36 overflow-hidden">
+                  <div className="flex items-center gap-3 px-8 py-5 bg-gradient-to-r from-orange-50 to-orange-100/50 dark:from-orange-950/30 dark:to-slate-900 border-b border-orange-200 dark:border-orange-900/40">
+                    <div className="w-9 h-9 rounded-lg bg-orange-600 flex items-center justify-center">
+                      <Scale className="w-[18px] h-[18px] text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Trade & Regulatory</h3>
+                  </div>
+                  <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                    {(() => {
+                      const text = product.tradeRegulatory || '';
+                      if (!text) return <div className="px-8 py-4 text-slate-500">Information not available.</div>;
+                      const parts = text.split(';').filter((p: string) => p.trim());
+                      return parts.map((part: string, i: number) => {
+                        const colonIdx = part.indexOf(':');
+                        if (colonIdx > 0) {
+                          const label = part.substring(0, colonIdx).trim();
+                          const value = part.substring(colonIdx + 1).trim();
+                          const isHSCode = label.includes('HS Code') || label.includes('Tariff');
+                          const isStorage = label.includes('Storage');
+                          const isWGK = label.includes('WGK');
+                          return (
+                            <div key={i} className={`flex items-center gap-4 px-8 py-3.5 ${i % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-50/70 dark:bg-slate-800/30'} hover:bg-orange-50/40 dark:hover:bg-orange-950/10 transition-colors`}>
+                              <span className="shrink-0">
+                                <Scale className="w-4 h-4 text-orange-500" />
                               </span>
-                            );
-                          }
-                          return <span key={i}>{i > 0 ? '; ' : ''}{part}</span>;
-                        });
-                      })()}
-                    </p>
+                              <span className="font-semibold text-slate-700 dark:text-slate-300 min-w-[160px] text-sm">{label}</span>
+                              <span className="text-sm font-medium">
+                                {isHSCode ? (
+                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 font-mono">{value}</span>
+                                ) : isStorage ? (
+                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400 border border-amber-200 dark:border-amber-800">{value}</span>
+                                ) : isWGK ? (
+                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400 border border-blue-200 dark:border-blue-800">{value}</span>
+                                ) : (
+                                  <span className="text-slate-900 dark:text-white">{value}</span>
+                                )}
+                              </span>
+                            </div>
+                          );
+                        }
+                        return <div key={i} className="px-8 py-3.5 text-slate-600 dark:text-slate-400 text-sm">{part.trim()}</div>;
+                      });
+                    })()}
                   </div>
                 </div>
                 )}

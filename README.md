@@ -1,20 +1,21 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# SoleChem EU | B2B Chemical Supplier and Manufacturer
 
-# Run and deploy your AI Studio app
+This repository contains the professional interface for **SoleChem EU**, a leading B2B supplier and manufacturer of industrial chemicals. This system is engineered to optimize technical data management, manufacturing specifications, and wholesale distribution workflows.
 
-This contains everything you need to run your app locally.
+## Project Overview
+This platform acts as a centralized data hub for our manufacturing and supply operations. It enables efficient access to chemical compositions, CAS registry data, and industrial safety standards across our product catalog.
 
-View your app in AI Studio: https://ai.studio/apps/4321337c-8f5b-4bca-9c3b-ee9840f3f41f
+---
 
-## Run Locally
+## Technical Deployment
 
-**Prerequisites:**  Node.js
+### Prerequisites
+* **Node.js** (Current LTS version)
+* Authorized System Credentials
 
+### Setup and Installation
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1. **Initialize Environment:**
+   Install the required dependencies via the terminal:
+   ```bash
+   npm install

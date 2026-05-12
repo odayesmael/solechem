@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductsPage from '../../components/react/ProductsPage.tsx';
+---
+
+<BaseLayout title="Products | SoleChem Europe" description="Browse our catalog of 4,500+ industrial chemicals. Search by product name, CAS number, category, or industry application.">
+  <ProductsPage client:load />
+</BaseLayout>

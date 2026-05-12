@@ -10,10 +10,20 @@ if (!industry) {
   return Astro.redirect('/industries');
 }
 
+// Prepare lightweight products for client (strip heavy fields)
 const industryProducts = PRODUCTS.filter(p =>
-  p.industry.includes(industry.name) ||
-  p.industry.some((ind: string) => ind.toLowerCase() === industry.name.toLowerCase())
-);
+  Array.isArray(p.industry)
+    ? p.industry.some((ind: string) => ind.toLowerCase() === industry.name.toLowerCase())
+    : (p.industry as string).toLowerCase() === industry.name.toLowerCase()
+).map(p => ({
+  id: p.id,
+  name: p.name,
+  slug: p.slug,
+  cas: p.cas,
+  formula: p.formula,
+  category: p.category,
+  description: (p.description || '').substring(0, 120),
+}));
 ---
 
 <BaseLayout title={`${industry.name} Chemical Solutions | SoleChem Europe`} description={industry.description}>

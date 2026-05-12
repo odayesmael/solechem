@@ -1,8 +1,21 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProductsPage from '../../components/react/ProductsPage.tsx';
+import { PRODUCTS } from '../../data';
+
+// Prepare lightweight product list for client (strip heavy fields to reduce payload)
+const productsLite = PRODUCTS.map(p => ({
+  id: p.id,
+  name: p.name,
+  slug: p.slug,
+  cas: p.cas,
+  formula: p.formula,
+  category: p.category,
+  industry: p.industry,
+  description: (p.description || '').substring(0, 120),
+}));
 ---
 
 <BaseLayout title="Products | SoleChem Europe" description="Browse our catalog of 4,500+ industrial chemicals. Search by product name, CAS number, category, or industry application.">
-  <ProductsPage client:load />
+  <ProductsPage client:load products={productsLite} />
 </BaseLayout>

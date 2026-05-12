@@ -1,16 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, Copy, Check, ShieldCheck, Phone, Mail, MessageCircle, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
-import { PRODUCTS, INDUSTRIES } from '@/data';
 import { cn } from '@/lib/utils';
 import QuoteModal from '@/components/react/QuoteModal';
 import type { Product } from '@/types';
 
-interface ProductDetailClientProps {
-  product: Product;
+interface SimilarProductInfo {
+  id: string;
+  name: string;
+  slug: string;
+  cas: string;
+  ec?: string;
 }
 
-export default function ProductDetailClient({ product }: ProductDetailClientProps) {
+interface IndustryInfo {
+  name: string;
+  slug: string;
+}
+
+interface ProductDetailClientProps {
+  product: Product;
+  industries: IndustryInfo[];
+  similarProducts: SimilarProductInfo[];
+}
+
+export default function ProductDetailClient({ product, industries: INDUSTRIES, similarProducts: resolvedSimilarProducts }: ProductDetailClientProps) {
   const [activeSection, setActiveSection] = useState('description');
   const [copied, setCopied] = useState<string | null>(null);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
@@ -26,7 +40,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
     ...(product.physicalProperties ? [{ id: 'physical-properties', label: 'Physical Properties' }] : []),
     ...(product.safetyHandling ? [{ id: 'safety-handling', label: 'Safety & Handling' }] : []),
     ...(product.tradeRegulatory ? [{ id: 'trade-regulatory', label: 'Trade & Regulatory' }] : []),
-    ...(product.similarProducts && product.similarProducts.length > 0 ? [{ id: 'similar-products', label: 'Similar Products' }] : [])
+    ...(resolvedSimilarProducts && resolvedSimilarProducts.length > 0 ? [{ id: 'similar-products', label: 'Similar Products' }] : [])
   ];
 
   useEffect(() => {
@@ -273,14 +287,11 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                 )}
 
                 {/* Similar Products Section */}
-                {product.similarProducts && product.similarProducts.length > 0 && (
+                {resolvedSimilarProducts && resolvedSimilarProducts.length > 0 && (
                 <div id="similar-products" className="bg-white dark:bg-slate-900 p-6 sm:p-8 border border-slate-200 dark:border-slate-800 scroll-mt-36">
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Related Products</h3>
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-                    {product.similarProducts.map((similarSlug: string) => {
-                      const similarProduct = PRODUCTS.find(p => p.slug === similarSlug);
-                      if (!similarProduct) return null;
-                      return (
+                    {resolvedSimilarProducts.map((similarProduct) => (
                         <a
                           key={similarProduct.id}
                           href={`/products/${similarProduct.slug}`}
@@ -291,8 +302,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                             CAS {similarProduct.cas}{similarProduct.ec && similarProduct.ec !== "N/A" ? `, EC ${similarProduct.ec}` : ''}
                           </p>
                         </a>
-                      );
-                    })}
+                    ))}
                   </div>
                 </div>
                 )}

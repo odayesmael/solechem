@@ -2,6 +2,7 @@
 import Navbar from '../components/react/Navbar.tsx';
 import Chatbot from '../components/react/Chatbot.tsx';
 import WhatsAppFloat from '../components/react/WhatsAppFloat.tsx';
+import ExitIntentPopup from '../components/react/ExitIntentPopup.tsx';
 import '../styles/global.css';
 
 interface Props {
@@ -162,6 +163,7 @@ const canonicalUrl = canonical || `${siteUrl}${currentPath}`;
       </Fragment>
       <Chatbot client:idle />
       <WhatsAppFloat client:idle />
+      <ExitIntentPopup client:idle />
     </div>
   </body>
 </html>

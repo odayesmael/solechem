@@ -13,10 +13,10 @@ export default function ExitIntentPopup() {
     // Don't show if already shown this session
     if (sessionStorage.getItem('exit-intent-shown')) return;
 
-    // Wait 8 seconds before arming the popup
+    // Wait 2 seconds before arming the popup
     const armTimer = setTimeout(() => {
       enabled.current = true;
-    }, 8000);
+    }, 2000);
 
     const handleMouseLeave = (e: MouseEvent) => {
       // Only trigger when mouse leaves through the top of the viewport

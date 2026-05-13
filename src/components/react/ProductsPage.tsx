@@ -119,7 +119,11 @@ export default function ProductsPage({ products: PRODUCTS }: Props) {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const el = document.getElementById('products-list-top');
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 90;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
   };
 
   const activeFilters = [
@@ -144,7 +148,7 @@ export default function ProductsPage({ products: PRODUCTS }: Props) {
           <span className="text-slate-900 dark:text-white">Products</span>
         </div>
 
-        <div className="space-y-5">
+        <div id="products-list-top" className="space-y-5">
           {/* Search & Toolbar */}
           <div className="bg-white dark:bg-slate-900 p-3 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row gap-3 items-center justify-between">
             <div className="relative flex-1 w-full flex items-center bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 px-3">

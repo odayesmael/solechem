@@ -57,7 +57,12 @@ export default function IndustryProducts({ products, industryName }: Props) {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Scroll to product list top, not page top
+    const el = document.getElementById('industry-products-top');
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 90;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
   };
 
   // Reset to page 1 when search changes
@@ -88,6 +93,7 @@ export default function IndustryProducts({ products, industryName }: Props) {
 
   return (
     <div className="flex-1 w-full space-y-5">
+      <div id="industry-products-top" />
       {/* Toolbar */}
       <div className="bg-white p-3 border border-slate-200 shadow-sm flex flex-col md:flex-row gap-3 items-center justify-between">
         <div className="relative flex-1 w-full flex items-center bg-slate-50 border border-slate-200 px-3">

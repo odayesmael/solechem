@@ -3,6 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="About SoleChem Europe | B2B Chemical Supplier & Manufacturer" description="Learn about SoleChem Europe S.R.L., a Milan-based chemical production and distribution company serving 50+ countries with 4,500+ products since 2013.">
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.solechem.eu/" },
+      { "@type": "ListItem", "position": 2, "name": "About", "item": "https://www.solechem.eu/about" }
+    ]
+  })} />
   <div class="min-h-screen bg-white pt-28 pb-20">
     <!-- Hero Section -->
     <section class="relative overflow-hidden border-b border-slate-200 bg-slate-50 pt-12 pb-20">
@@ -75,9 +83,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="relative">
           <div class="absolute inset-0 bg-slate-100 rounded-sm transform rotate-3 scale-105 opacity-50"></div>
           <img
-            src="/about-hero.png"
+            src="/about-hero.webp"
             alt="SoleChem Chemical Distribution Facility"
             class="relative rounded-sm object-cover w-full h-[500px] shadow-sm border border-slate-200"
+            loading="lazy"
+            decoding="async"
+            width="800"
+            height="500"
           />
         </div>
       </div>
@@ -145,6 +157,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   src="https://www.solechem.eu/solechem-srl-iso-9001.webp"
                   alt="ISO 9001:2015 Certificate"
                   class="relative w-full h-auto rounded-sm shadow-sm border border-slate-200 transform group-hover:-translate-y-1 transition-all duration-300"
+                  loading="lazy"
+                  decoding="async"
                 />
               </a>
             </div>
@@ -168,6 +182,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   src="https://www.solechem.eu/solechem-srl-iso-22000.webp"
                   alt="ISO 22000:2018 Certificate"
                   class="relative w-full h-auto rounded-sm shadow-sm border border-slate-200 transform group-hover:-translate-y-1 transition-all duration-300"
+                  loading="lazy"
+                  decoding="async"
                 />
               </a>
             </div>
@@ -191,6 +207,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   src="https://www.solechem.eu/solechem-srl-gmp-plus.webp"
                   alt="GMP+ Certificate"
                   class="relative w-full h-auto rounded-sm shadow-sm border border-slate-200 transform group-hover:-translate-y-1 transition-all duration-300"
+                  loading="lazy"
+                  decoding="async"
                 />
               </a>
             </div>

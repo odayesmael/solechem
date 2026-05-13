@@ -1,20 +1,59 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# SoleChem Europe — B2B Chemical Distribution Platform
 
-# Run and deploy your AI Studio app
+Corporate website for **SoleChem Europe S.r.l.**, a B2B chemical distributor and manufacturer headquartered in Milan, Italy. The platform serves as the primary digital presence for product discovery, industry solutions, and commercial inquiries across 50+ countries.
 
-This contains everything you need to run your app locally.
+## Tech Stack
 
-View your app in AI Studio: https://ai.studio/apps/4321337c-8f5b-4bca-9c3b-ee9840f3f41f
+- **Framework:** Astro 5 (SSR) with React Islands
+- **Styling:** Tailwind CSS v4
+- **Deployment:** Vercel (auto-deploy from `main`)
+- **Domain:** [www.solechem.eu](https://www.solechem.eu)
 
-## Run Locally
+## Getting Started
 
-**Prerequisites:**  Node.js
+**Prerequisites:** Node.js 18+
 
+```bash
+npm install
+npm run dev
+```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+The dev server starts at `http://localhost:4321`.
+
+## Project Structure
+
+```
+src/
+├── components/react/   # Interactive React islands
+├── data/               # Product catalog, industries, categories, news
+├── layouts/            # Base layout with SEO, structured data
+├── pages/              # Astro file-based routing
+│   ├── products/       # Product catalog + detail pages (4,500+ products)
+│   ├── industries/     # Industry landing pages (20 sectors)
+│   ├── news/           # News listing + article pages
+│   └── ...
+└── styles/             # Global CSS + Tailwind theme
+public/                 # Static assets (images, favicon, robots.txt)
+```
+
+## Build
+
+```bash
+npm run build    # Production build (SSR + static assets)
+npm run preview  # Preview production build locally
+```
+
+## Key Features
+
+- Full product catalog with CAS search, category/industry filtering
+- Individual product pages with safety data, physical properties, trade info
+- Industry-specific landing pages with relevant product listings
+- News & insights section
+- Contact and quote request forms
+- ISO 9001:2015 & ISO 22000:2018 certified operations
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `GEMINI_API_KEY` | Google Gemini API key (for chatbot assistant) |

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Copy, Check, ShieldCheck, Phone, Mail, MessageCircle, ArrowRight } from 'lucide-react';
+import { ChevronRight, Copy, Check, ShieldCheck, Phone, Mail, MessageCircle, ArrowRight, FlaskConical, AlertTriangle, Scale, Thermometer, Droplets, Atom } from 'lucide-react';
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import QuoteModal from '@/components/react/QuoteModal';
@@ -204,84 +204,216 @@ export default function ProductDetailClient({ product, industries: INDUSTRIES, s
 
                 {/* Physical Properties Section */}
                 {product.physicalProperties && (
-                <div id="physical-properties" className="bg-white dark:bg-slate-900 p-8 border border-slate-200 dark:border-slate-800 scroll-mt-36">
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Physical Properties</h3>
-                  <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 leading-relaxed text-[15px]">
-                    <p>
-                      {(() => {
-                        const text = product.physicalProperties || '';
-                        if (!text) return 'Information not available.';
-                        const parts = text.split(';');
-                        return parts.map((part: string, i: number) => {
-                          const colonIdx = part.indexOf(':');
-                          if (colonIdx > 0) {
-                            const label = part.substring(0, colonIdx);
-                            const value = part.substring(colonIdx);
-                            return (
-                              <span key={i}>
-                                {i > 0 && '; '}
-                                <strong className="font-bold text-slate-800 dark:text-white">{label.trim()}</strong>
-                                {value}
-                              </span>
-                            );
-                          }
-                          return <span key={i}>{i > 0 ? '; ' : ''}{part}</span>;
-                        });
-                      })()}
-                    </p>
+                <div id="physical-properties" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 scroll-mt-36 overflow-hidden">
+                  <div className="flex items-center gap-3 px-8 py-5 bg-gradient-to-r from-orange-50 to-orange-100/50 dark:from-orange-950/30 dark:to-slate-900 border-b border-orange-200 dark:border-orange-900/40">
+                    <div className="w-9 h-9 rounded-lg bg-orange-600 flex items-center justify-center">
+                      <FlaskConical className="w-[18px] h-[18px] text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Physical Properties</h3>
+                  </div>
+                  <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                    {(() => {
+                      const text = product.physicalProperties || '';
+                      if (!text) return <div className="px-8 py-4 text-slate-500">Information not available.</div>;
+                      const parts = text.split(';').filter((p: string) => p.trim());
+                      return parts.map((part: string, i: number) => {
+                        const colonIdx = part.indexOf(':');
+                        if (colonIdx > 0) {
+                          const label = part.substring(0, colonIdx).trim();
+                          const value = part.substring(colonIdx + 1).trim();
+                          const iconMap: Record<string, React.ReactNode> = {
+                            'Melting Point': <Thermometer className="w-4 h-4 text-orange-500" />,
+                            'Boiling Point': <Thermometer className="w-4 h-4 text-red-500" />,
+                            'Density': <Droplets className="w-4 h-4 text-blue-500" />,
+                            'Water Solubility': <Droplets className="w-4 h-4 text-cyan-500" />,
+                          };
+                          const icon = iconMap[label] || <Atom className="w-4 h-4 text-slate-400 dark:text-slate-500" />;
+                          return (
+                            <div key={i} className={`flex items-center gap-4 px-8 py-3.5 ${i % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-50/70 dark:bg-slate-800/30'} hover:bg-orange-50/40 dark:hover:bg-orange-950/10 transition-colors`}>
+                              <span className="shrink-0">{icon}</span>
+                              <span className="font-semibold text-slate-700 dark:text-slate-300 min-w-[160px] text-sm">{label}</span>
+                              <span className="text-slate-900 dark:text-white text-sm font-medium">{value}</span>
+                            </div>
+                          );
+                        }
+                        return <div key={i} className="px-8 py-3.5 text-slate-600 dark:text-slate-400 text-sm">{part.trim()}</div>;
+                      });
+                    })()}
                   </div>
                 </div>
                 )}
 
                 {/* Safety & Handling Section */}
                 {product.safetyHandling && (
-                <div id="safety-handling" className="bg-white dark:bg-slate-900 p-8 border border-slate-200 dark:border-slate-800 scroll-mt-36">
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Safety & Handling</h3>
-                  <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 leading-relaxed text-[15px]">
-                    <p>
-                      {(() => {
-                        const text = product.safetyHandling || 'Information not available.';
-                        if (text === 'Information not available.') return text;
-                        const pattern = /(Danger|Warning|Hazard Statements|Precautionary Statements|GHS\d{2}|H\d{3}|P\d{3}(?:\+P\d{3})*)/g;
-                        const parts = text.split(pattern);
-                        return parts.map((part: string, i: number) =>
-                          pattern.test(part)
-                            ? <strong key={i} className="font-bold text-slate-800 dark:text-white">{part}</strong>
-                            : part
-                        );
-                      })()}
-                    </p>
+                <div id="safety-handling" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 scroll-mt-36 overflow-hidden">
+                  <div className="flex items-center gap-3 px-8 py-5 bg-gradient-to-r from-orange-50 to-orange-100/50 dark:from-orange-950/30 dark:to-slate-900 border-b border-orange-200 dark:border-orange-900/40">
+                    <div className="w-9 h-9 rounded-lg bg-orange-600 flex items-center justify-center">
+                      <AlertTriangle className="w-[18px] h-[18px] text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Safety & Handling</h3>
                   </div>
+                  {(() => {
+                    const text = (product.safetyHandling || '').trim();
+                    if (!text) return <div className="px-8 py-6 text-slate-500">Information not available.</div>;
+
+                    // Parse signal word
+                    let signalWord: string | null = null;
+                    let rest = text;
+                    const swMatch = text.match(/^(Danger|Warning)\s/);
+                    if (swMatch) { signalWord = swMatch[1]; rest = text.substring(swMatch[0].length); }
+
+                    // Parse GHS codes (before Hazard Statements)
+                    const ghsCodes: string[] = [];
+                    const hazardIdx = rest.indexOf('Hazard Statements');
+                    const preHazard = hazardIdx >= 0 ? rest.substring(0, hazardIdx) : rest;
+                    let gm: RegExpExecArray | null;
+                    const ghsRe = /GHS(\d{2})/g;
+                    while ((gm = ghsRe.exec(preHazard)) !== null) ghsCodes.push('GHS' + gm[1]);
+
+                    // Parse Hazard Statements
+                    const hazardStatements: { code: string; desc: string }[] = [];
+                    const hSection = rest.match(/Hazard Statements\s*([\s\S]*?)(?=Precautionary Statements|$)/);
+                    if (hSection) {
+                      hSection[1].trim().split(/(?=H\d{3}\s)/).forEach((part: string) => {
+                        const m = part.match(/^(H\d{3})\s+([\s\S]*)/);
+                        if (m) hazardStatements.push({ code: m[1], desc: m[2].trim().replace(/\[.*?\]/g, '').replace(/;\s*$/, '').trim() });
+                      });
+                    }
+
+                    // Parse Precautionary Statements
+                    const precStatements: { code: string; desc: string }[] = [];
+                    const pSection = rest.match(/Precautionary Statements\s*([\s\S]*?)$/);
+                    if (pSection) {
+                      pSection[1].trim().split(/(?=P\d{3})/).forEach((part: string) => {
+                        const m = part.match(/^(P\d{3}(?:\+P\d{3})*)\s+([\s\S]*)/);
+                        if (m) precStatements.push({ code: m[1], desc: m[2].trim().replace(/\[.*?\]/g, '').replace(/;\s*$/, '').trim() });
+                      });
+                    }
+
+                    const isDanger = signalWord === 'Danger';
+
+                    // GHS code to description map
+                    const ghsNames: Record<string, string> = {
+                      'GHS01': 'Explosive', 'GHS02': 'Flammable', 'GHS03': 'Oxidizer',
+                      'GHS04': 'Compressed Gas', 'GHS05': 'Corrosive', 'GHS06': 'Toxic',
+                      'GHS07': 'Irritant', 'GHS08': 'Health Hazard', 'GHS09': 'Environment',
+                    };
+
+                    return (
+                      <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                        {/* Signal Word + GHS Row */}
+                        {(signalWord || ghsCodes.length > 0) && (
+                          <div className="px-6 sm:px-8 py-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                            {signalWord && (
+                              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm uppercase tracking-wider ${isDanger ? 'bg-red-600 text-white' : 'bg-amber-500 text-white'}`}>
+                                <AlertTriangle className="w-4 h-4" />
+                                {signalWord}
+                              </div>
+                            )}
+                            {ghsCodes.length > 0 && (
+                              <div className="flex flex-wrap gap-2">
+                                {ghsCodes.map((code, i) => (
+                                  <span key={i} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 text-xs font-semibold text-orange-700 dark:text-orange-400">
+                                    <ShieldCheck className="w-3.5 h-3.5" />
+                                    {code}
+                                    <span className="text-orange-500 dark:text-orange-500 font-normal">· {ghsNames[code] || 'Hazard'}</span>
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Hazard Statements */}
+                        {hazardStatements.length > 0 && (
+                          <div className="px-6 sm:px-8 py-5">
+                            <div className="flex items-center gap-2 mb-3">
+                              <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                              <h4 className="text-sm font-bold uppercase tracking-wider text-red-600 dark:text-red-400">Hazard Statements</h4>
+                            </div>
+                            <div className="grid gap-1.5">
+                              {hazardStatements.map((h, i) => (
+                                <div key={i} className={`flex items-start gap-3 px-4 py-2.5 rounded-lg ${i % 2 === 0 ? 'bg-red-50/50 dark:bg-red-950/10' : 'bg-white dark:bg-slate-900'}`}>
+                                  <span className="shrink-0 mt-0.5 inline-flex items-center justify-center min-w-[52px] px-2 py-0.5 rounded bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 text-xs font-mono font-bold">
+                                    {h.code}
+                                  </span>
+                                  <span className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{h.desc}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Precautionary Statements */}
+                        {precStatements.length > 0 && (
+                          <div className="px-6 sm:px-8 py-5">
+                            <div className="flex items-center gap-2 mb-3">
+                              <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                              <h4 className="text-sm font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Precautionary Statements</h4>
+                            </div>
+                            <div className="grid gap-1.5">
+                              {precStatements.map((p, i) => (
+                                <div key={i} className={`flex items-start gap-3 px-4 py-2.5 rounded-lg ${i % 2 === 0 ? 'bg-blue-50/40 dark:bg-blue-950/10' : 'bg-white dark:bg-slate-900'}`}>
+                                  <span className="shrink-0 mt-0.5 inline-flex items-center justify-center min-w-[52px] px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-mono font-bold">
+                                    {p.code}
+                                  </span>
+                                  <span className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{p.desc}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
                 )}
 
                 {/* Trade & Regulatory Section */}
                 {product.tradeRegulatory && (
-                <div id="trade-regulatory" className="bg-white dark:bg-slate-900 p-8 border border-slate-200 dark:border-slate-800 scroll-mt-36">
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Trade & Regulatory</h3>
-                  <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 leading-relaxed text-[15px]">
-                    <p>
-                      {(() => {
-                        const text = product.tradeRegulatory || 'Information not available.';
-                        if (text === 'Information not available.') return text;
-                        const parts = text.split(';');
-                        return parts.map((part: string, i: number) => {
-                          const colonIdx = part.indexOf(':');
-                          if (colonIdx > 0) {
-                            const label = part.substring(0, colonIdx);
-                            const value = part.substring(colonIdx);
-                            return (
-                              <span key={i}>
-                                {i > 0 && '; '}
-                                <strong className="font-bold text-slate-800 dark:text-white">{label.trim()}</strong>
-                                {value}
+                <div id="trade-regulatory" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 scroll-mt-36 overflow-hidden">
+                  <div className="flex items-center gap-3 px-8 py-5 bg-gradient-to-r from-orange-50 to-orange-100/50 dark:from-orange-950/30 dark:to-slate-900 border-b border-orange-200 dark:border-orange-900/40">
+                    <div className="w-9 h-9 rounded-lg bg-orange-600 flex items-center justify-center">
+                      <Scale className="w-[18px] h-[18px] text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Trade & Regulatory</h3>
+                  </div>
+                  <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                    {(() => {
+                      const text = product.tradeRegulatory || '';
+                      if (!text) return <div className="px-8 py-4 text-slate-500">Information not available.</div>;
+                      const parts = text.split(';').filter((p: string) => p.trim());
+                      return parts.map((part: string, i: number) => {
+                        const colonIdx = part.indexOf(':');
+                        if (colonIdx > 0) {
+                          const label = part.substring(0, colonIdx).trim();
+                          const value = part.substring(colonIdx + 1).trim();
+                          const isHSCode = label.includes('HS Code') || label.includes('Tariff');
+                          const isStorage = label.includes('Storage');
+                          const isWGK = label.includes('WGK');
+                          return (
+                            <div key={i} className={`flex items-center gap-4 px-8 py-3.5 ${i % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-50/70 dark:bg-slate-800/30'} hover:bg-orange-50/40 dark:hover:bg-orange-950/10 transition-colors`}>
+                              <span className="shrink-0">
+                                <Scale className="w-4 h-4 text-orange-500" />
                               </span>
-                            );
-                          }
-                          return <span key={i}>{i > 0 ? '; ' : ''}{part}</span>;
-                        });
-                      })()}
-                    </p>
+                              <span className="font-semibold text-slate-700 dark:text-slate-300 min-w-[160px] text-sm">{label}</span>
+                              <span className="text-sm font-medium">
+                                {isHSCode ? (
+                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 font-mono">{value}</span>
+                                ) : isStorage ? (
+                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400 border border-amber-200 dark:border-amber-800">{value}</span>
+                                ) : isWGK ? (
+                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400 border border-blue-200 dark:border-blue-800">{value}</span>
+                                ) : (
+                                  <span className="text-slate-900 dark:text-white">{value}</span>
+                                )}
+                              </span>
+                            </div>
+                          );
+                        }
+                        return <div key={i} className="px-8 py-3.5 text-slate-600 dark:text-slate-400 text-sm">{part.trim()}</div>;
+                      });
+                    })()}
                   </div>
                 </div>
                 )}

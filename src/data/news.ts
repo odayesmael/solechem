@@ -20,7 +20,7 @@ export const NEWS_ITEMS: NewsItem[] = [
     excerpt: 'We are proud to announce new strategic partnerships in the MENA region, strengthening our supply chain capabilities and enabling faster delivery to clients across the Gulf states.',
     content: `SoleChem Europe is thrilled to announce a significant expansion of our distribution network across the Middle East and North Africa (MENA) region. This strategic move comes as part of our long-term growth plan to better serve our clients in one of the world's fastest-growing chemical markets.
 
-Through new partnerships with leading logistics providers and local distributors in the UAE, Saudi Arabia, and Egypt, we are now able to offer dramatically reduced delivery times and improved supply chain reliability for our entire product portfolio of over 2,800 chemicals.
+Through new partnerships with leading logistics providers and local distributors in the UAE, Saudi Arabia, and Egypt, we are now able to offer dramatically reduced delivery times and improved supply chain reliability for our entire product portfolio of over 4,483 chemicals.
 
 Key highlights of this expansion include:
 

@@ -7,8 +7,8 @@ Corporate website for **SoleChem Europe S.r.l.**, a B2B chemical distributor and
 - **Framework:** Astro 5 (SSR) with React Islands
 - **Styling:** Tailwind CSS v4
 - **Deployment:** Vercel (auto-deploy from `main`)
-- **Domain:** [www.solechem.eu](https://www.solechem.eu)
 
+  
 ## Getting Started
 
 **Prerequisites:** Node.js 18+

@@ -40,6 +40,16 @@ const canonicalUrl = canonical || `${siteUrl}${currentPath}`;
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 
+    <!-- hreflang (English, European market) -->
+    <link rel="alternate" hreflang="en" href={canonicalUrl} />
+    <link rel="alternate" hreflang="x-default" href={canonicalUrl} />
+
+    <!-- Geo targeting -->
+    <meta name="geo.region" content="IT" />
+    <meta name="geo.placename" content="Milan" />
+    <meta name="geo.position" content="45.5186;9.3769" />
+    <meta name="ICBM" content="45.5186, 9.3769" />
+
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
@@ -54,14 +64,16 @@ const canonicalUrl = canonical || `${siteUrl}${currentPath}`;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <!-- Structured Data -->
+    <!-- Structured Data: Organization + LocalBusiness -->
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": ["Organization", "LocalBusiness"],
       "name": "SoleChem Europe S.r.l.",
+      "alternateName": "SoleChem",
       "url": siteUrl,
       "logo": ogImage,
-      "description": "Premium B2B chemical distributor and manufacturer based in Milan, Italy.",
+      "image": ogImage,
+      "description": "Premium B2B chemical distributor and manufacturer based in Milan, Italy. Over 4,500 products, ISO 9001 & ISO 22000 certified, serving 50+ countries across Europe, Middle East, and Asia.",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Via Leonardo da Vinci 9",
@@ -70,10 +82,43 @@ const canonicalUrl = canonical || `${siteUrl}${currentPath}`;
         "postalCode": "20051",
         "addressCountry": "IT"
       },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 45.5186,
+        "longitude": 9.3769
+      },
       "telephone": "+390230556150",
       "email": "info@solechem.eu",
       "foundingDate": "2013",
-      "sameAs": ["https://www.linkedin.com/company/solechem/"]
+      "numberOfEmployees": { "@type": "QuantitativeValue", "minValue": 10, "maxValue": 50 },
+      "priceRange": "$$",
+      "currenciesAccepted": "EUR, USD",
+      "paymentAccepted": "Bank Transfer, Letter of Credit",
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "09:00",
+        "closes": "18:00"
+      },
+      "areaServed": [
+        { "@type": "Continent", "name": "Europe" },
+        { "@type": "Place", "name": "Middle East" },
+        { "@type": "Place", "name": "Asia" }
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Chemical Products Catalog",
+        "itemListElement": [
+          { "@type": "OfferCatalog", "name": "Pharmaceutical Intermediates" },
+          { "@type": "OfferCatalog", "name": "Food Additives" },
+          { "@type": "OfferCatalog", "name": "Industrial Chemicals" },
+          { "@type": "OfferCatalog", "name": "Solvents" },
+          { "@type": "OfferCatalog", "name": "Surfactants" }
+        ]
+      },
+      "sameAs": ["https://www.linkedin.com/company/solechem/"],
+      "iso6523Code": "IT",
+      "knowsAbout": ["Chemical Distribution", "Chemical Manufacturing", "Toll Manufacturing", "Pharmaceutical Intermediates", "Food Grade Chemicals", "Industrial Solvents"]
     })} />
 
     <!-- Fonts (preconnect + preload for faster LCP) -->
@@ -147,6 +192,7 @@ const canonicalUrl = canonical || `${siteUrl}${currentPath}`;
                   { label: 'Manufacturing', path: '/manufacturing' },
                   { label: 'News & Insights', path: '/news' },
                   { label: 'Sole Talent', path: '/sole-talent' },
+                  { label: 'FAQ', path: '/faq' },
                   { label: 'Contact', path: '/contact' },
                 ].map(link => (
                   <li>

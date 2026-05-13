@@ -3,6 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="About SoleChem Europe | B2B Chemical Supplier & Manufacturer" description="Learn about SoleChem Europe S.R.L., a Milan-based chemical production and distribution company serving 50+ countries with 4,500+ products since 2013.">
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.solechem.eu/" },
+      { "@type": "ListItem", "position": 2, "name": "About", "item": "https://www.solechem.eu/about" }
+    ]
+  })} />
   <div class="min-h-screen bg-white pt-28 pb-20">
     <!-- Hero Section -->
     <section class="relative overflow-hidden border-b border-slate-200 bg-slate-50 pt-12 pb-20">

@@ -47,7 +47,7 @@ export default function ProductsPage({ products: PRODUCTS }: Props) {
     if (ind) setActiveIndustries([ind]);
     if (page) setCurrentPage(parseInt(page, 10));
   }, []);
-  const ITEMS_PER_PAGE = 50;
+  const ITEMS_PER_PAGE = 24;
 
   // Sync URL params without full page reload
   const updateURL = (params: Record<string, string | null>) => {

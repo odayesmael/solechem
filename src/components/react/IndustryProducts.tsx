@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Package, ArrowRight, Search, Grid, List } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { Package, ArrowRight, Search, Grid, List, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 interface ProductLite {
@@ -17,29 +17,100 @@ interface Props {
   industryName: string;
 }
 
+const ITEMS_PER_PAGE = 24;
+
 export default function IndustryProducts({ products, industryName }: Props) {
   const [search, setSearch] = useState('');
   const [view, setView] = useState<'grid' | 'list'>('list');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState('name-asc');
 
-  const filteredProducts = products.filter(p =>
-    p.name.toLowerCase().includes(search.toLowerCase()) ||
-    p.cas.toLowerCase().includes(search.toLowerCase())
+  const filteredProducts = useMemo(() => {
+    const filtered = products.filter(p =>
+      p.name.toLowerCase().includes(search.toLowerCase()) ||
+      p.cas.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const sorted = [...filtered];
+    switch (sortBy) {
+      case 'name-asc':
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'name-desc':
+        sorted.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case 'cas':
+        sorted.sort((a, b) => a.cas.localeCompare(b.cas));
+        break;
+      case 'category':
+        sorted.sort((a, b) => a.category.localeCompare(b.category) || a.name.localeCompare(b.name));
+        break;
+    }
+    return sorted;
+  }, [products, search, sortBy]);
+
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
   );
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Reset to page 1 when search changes
+  const handleSearchChange = (val: string) => {
+    setSearch(val);
+    setCurrentPage(1);
+  };
+
+  const pageNumbers = useMemo(() => {
+    const pages: (number | 'dots')[] = [];
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - 1 && i <= currentPage + 1)
+      ) {
+        pages.push(i);
+      } else if (
+        (i === currentPage - 2 || i === currentPage + 2) &&
+        !pages.includes('dots')
+      ) {
+        pages.push('dots');
+      }
+    }
+    // Clean up consecutive dots
+    return pages.filter((p, idx, arr) => p !== 'dots' || arr[idx - 1] !== 'dots');
+  }, [totalPages, currentPage]);
 
   return (
     <div className="flex-1 w-full space-y-5">
+      {/* Toolbar */}
       <div className="bg-white p-3 border border-slate-200 shadow-sm flex flex-col md:flex-row gap-3 items-center justify-between">
         <div className="relative flex-1 w-full flex items-center bg-slate-50 border border-slate-200 px-3">
           <Search className="w-4 h-4 text-slate-400" />
           <input
             type="text"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             placeholder={`Search ${industryName} products...`}
             className="w-full h-10 pl-3 bg-transparent text-[13px] font-medium focus:outline-none transition-all text-slate-900 placeholder-slate-400"
           />
         </div>
         <div className="flex items-center gap-1 shrink-0 px-2">
+          <select
+            value={sortBy}
+            onChange={(e) => { setSortBy(e.target.value); setCurrentPage(1); }}
+            className="bg-transparent border-none text-[12px] font-medium text-slate-700 focus:ring-0 cursor-pointer outline-none p-0 hover:text-orange-600 transition-colors"
+          >
+            <option value="name-asc">A-Z</option>
+            <option value="name-desc">Z-A</option>
+            <option value="cas">CAS</option>
+            <option value="category">Category</option>
+          </select>
           <div className="h-6 w-px bg-slate-200 mx-1 hidden sm:block" />
           <button
             onClick={() => setView('grid')}
@@ -53,13 +124,27 @@ export default function IndustryProducts({ products, industryName }: Props) {
           >
             <List className="w-4 h-4" />
           </button>
-          <div className="text-[13px] font-medium text-slate-600 ml-2">
+          <div className="h-6 w-px bg-slate-200 mx-1 hidden sm:block" />
+          <div className="text-[13px] font-medium text-slate-600 ml-1">
             <span className="font-bold text-slate-900">{filteredProducts.length}</span> Products
           </div>
         </div>
       </div>
 
-      {filteredProducts.length > 0 ? (
+      {/* Results info */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between px-1 text-[12px] text-slate-500 font-medium">
+          <span>
+            Showing <span className="text-slate-900 font-bold">{(currentPage - 1) * ITEMS_PER_PAGE + 1}</span>–<span className="text-slate-900 font-bold">{Math.min(currentPage * ITEMS_PER_PAGE, filteredProducts.length)}</span> of <span className="text-slate-900 font-bold">{filteredProducts.length}</span>
+          </span>
+          <span>
+            Page <span className="text-slate-900 font-bold">{currentPage}</span> of <span className="text-slate-900 font-bold">{totalPages}</span>
+          </span>
+        </div>
+      )}
+
+      {/* Products list */}
+      {paginatedProducts.length > 0 ? (
         <div className={cn(
           "grid gap-4",
           view === 'grid' ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid-cols-1 gap-0 border-y border-slate-200"
@@ -73,7 +158,7 @@ export default function IndustryProducts({ products, industryName }: Props) {
               <div className="col-span-2 text-right">Action</div>
             </div>
           )}
-          {filteredProducts.map((product) => (
+          {paginatedProducts.map((product) => (
             <div
               key={product.id}
               className={cn(
@@ -142,10 +227,53 @@ export default function IndustryProducts({ products, industryName }: Props) {
             We couldn't find any products matching your search criteria in this industry.
           </p>
           <button
-            onClick={() => setSearch('')}
+            onClick={() => handleSearchChange('')}
             className="mt-6 text-[12px] text-orange-600 font-semibold uppercase tracking-widest hover:text-orange-700 underline transition-colors"
           >
             Clear Search
+          </button>
+        </div>
+      )}
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-1 pt-6 pb-2">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="w-10 h-10 flex items-center justify-center border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+
+          <div className="flex items-center">
+            {pageNumbers.map((page, idx) => {
+              if (page === 'dots') {
+                return <span key={`dots-${idx}`} className="text-slate-400 px-3 w-10 flex justify-center">...</span>;
+              }
+              return (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={cn(
+                    "w-10 h-10 flex items-center justify-center text-[13px] font-semibold transition-colors",
+                    currentPage === page
+                      ? "bg-orange-50 text-orange-700 border border-orange-200"
+                      : "text-slate-600 hover:bg-slate-50"
+                  )}
+                >
+                  {page}
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="w-10 h-10 flex items-center justify-center border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       )}

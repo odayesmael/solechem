@@ -78,7 +78,6 @@ export default function Navbar({ currentPath = '/' }: NavbarProps) {
           <a href="/contact" className={cn("text-sm font-semibold transition-colors px-4", currentPath === '/contact' ? "text-orange-600" : (isLightMode ? "text-slate-600 dark:text-slate-300 hover:text-orange-600" : "text-white/80 hover:text-white"))} onMouseEnter={() => setActiveMegaMenu(null)}>Contact</a>
         </div>
         <div className="flex items-center gap-4 shrink-0" onMouseEnter={() => setActiveMegaMenu(null)}>
-          <a href="tel:+390230556150" className={cn("hidden sm:flex items-center gap-1 text-xs font-bold", isLightMode ? "text-slate-900 dark:text-white" : "text-white")}><Phone className="w-3.5 h-3.5 text-orange-600" />+39 02 3055 6150</a>
           <button onClick={() => setIsQuoteModalOpen(true)} className="hidden sm:flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-4 h-9 rounded-sm text-xs font-bold transition-all active:scale-95">SUBMIT RFQ</button>
           <button className={cn("lg:hidden p-2", isLightMode ? "text-slate-600" : "text-white")} onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}</button>
         </div>

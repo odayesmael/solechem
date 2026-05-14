@@ -5,20 +5,36 @@ import { motion, AnimatePresence } from 'motion/react';
 import QuoteModal from './QuoteModal';
 
 const INDUSTRIES_MENU = [
-  { name: "Aerospace & Defense", slug: "aerospace-defense", imageUrl: "/industries/Aerospace & Defense.webp" },
-  { name: "Agriculture & Feed", slug: "agriculture-feed", imageUrl: "/industries/Agriculture & Feed.webp" },
-  { name: "Automotive", slug: "automotive", imageUrl: "/industries/Automotive.webp" },
-  { name: "Biotechnology & Life Sciences", slug: "biotechnology-life-sciences", imageUrl: "/industries/Biotechnology & Life Sciences.webp" },
-  { name: "Electronics", slug: "electronics", imageUrl: "/industries/Electronics.webp" },
-  { name: "Food & Nutrition", slug: "food-nutrition", imageUrl: "/industries/Food & Nutrition.webp" },
-  { name: "Pharmaceuticals & Healthcare", slug: "pharmaceuticals-healthcare", imageUrl: "/industries/Pharmaceuticals & Healthcare.webp" },
-  { name: "Water Treatment", slug: "water-treatment", imageUrl: "/industries/Water Treatment.webp" },
+  { name: "Aerospace & Defense", slug: "aerospace-defense" },
+  { name: "Agriculture & Feed", slug: "agriculture-feed" },
+  { name: "Automotive", slug: "automotive" },
+  { name: "Biotechnology & Life Sciences", slug: "biotechnology-life-sciences" },
+  { name: "Building & Construction", slug: "building-construction" },
+  { name: "Coatings, Adhesives, Sealants & Elastomers", slug: "coatings-adhesives-sealants-elastomers" },
+  { name: "Electronics", slug: "electronics" },
+  { name: "Food & Nutrition", slug: "food-nutrition" },
+  { name: "Home Care & Industrial Cleaning", slug: "home-care-industrial-cleaning" },
+  { name: "Lubricants & Metalworking", slug: "lubricants-metalworking" },
+  { name: "Mining & Metals", slug: "mining-metals" },
+  { name: "Oil, Gas & Energy", slug: "oil-gas-energy" },
+  { name: "Personal Care & Cosmetics", slug: "personal-care-cosmetics" },
+  { name: "Pharmaceuticals & Healthcare", slug: "pharmaceuticals-healthcare" },
+  { name: "Plastics & Polymers", slug: "plastics-polymers" },
+  { name: "Printing & Packaging", slug: "printing-packaging" },
+  { name: "Pulp & Paper", slug: "pulp-paper" },
+  { name: "Rubber & Tire", slug: "rubber-tire" },
+  { name: "Textile, Leather & Paper", slug: "textile-leather-paper" },
+  { name: "Water Treatment", slug: "water-treatment" },
 ];
 
 const TOP_CATEGORIES = [
   "Agrochemicals","Alcohols & Glycols","Alkalis & Bases","Amines","Amino Acids & Peptides",
   "Catalysts & Catalyst Precursors","Chelating Agents","Flame Retardants",
-  "Flavors & Fragrances","Heterocyclic Compounds","Inorganic Acids","Monomers & Building Blocks"
+  "Flavors & Fragrances","Heterocyclic Compounds","Inorganic Acids","Monomers & Building Blocks",
+  "Nucleosides & Nucleotides","Oils, Fats & Waxes","Organic Acids","Organometallic Compounds",
+  "Oxidizers & Peroxides","Pharmaceutical Intermediates","Pigments & Colorants",
+  "Polymers & Resins","Salts & Minerals","Silicones & Silicates","Solvents",
+  "Surfactants","Sweeteners & Food Additives","UV Absorbers & Stabilizers","Vitamins & Nutrients"
 ];
 
 const MANUFACTURING_SERVICES = [
@@ -86,17 +102,17 @@ export default function Navbar({ currentPath = '/' }: NavbarProps) {
       <AnimatePresence>
         {activeMegaMenu === 'products' && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }} className="absolute top-20 left-0 right-0 bg-white border-b border-gray-200 shadow-xl overflow-hidden">
-            <div className="max-w-7xl mx-auto px-4 py-8"><div className="flex gap-12">
-              <div className="w-1/3"><h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2"><Beaker className="w-5 h-5 text-orange-600" /> Product Categories</h3><p className="text-sm text-slate-500 mb-6 leading-relaxed">Browse our extensive catalog of over 1,000 high-quality chemical products.</p><a href="/categories" className="inline-flex items-center gap-2 text-sm font-bold text-orange-600 hover:text-orange-700 transition-colors">View All Categories <ArrowRight className="w-4 h-4" /></a></div>
-              <div className="w-2/3 grid grid-cols-2 gap-x-8 gap-y-4 border-l border-gray-100 pl-12">{TOP_CATEGORIES.map(cat => (<a key={cat} href={`/products?category=${encodeURIComponent(cat)}`} className="group flex items-center justify-between p-3 rounded-xl hover:bg-orange-50 transition-colors"><span className="text-sm font-bold text-slate-700 group-hover:text-orange-700">{cat}</span><ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-orange-500 transform group-hover:translate-x-1 transition-all" /></a>))}</div>
+            <div className="max-w-7xl mx-auto px-4 py-6"><div className="flex gap-8">
+              <div className="w-56 shrink-0"><h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2"><Beaker className="w-5 h-5 text-orange-600" /> Categories</h3><p className="text-[13px] text-slate-500 mb-6 leading-relaxed">Browse 27 categories across 4,483+ chemical products.</p><a href="/categories" className="inline-flex items-center gap-2 text-sm font-bold text-orange-600 hover:text-orange-700 transition-colors">View All <ArrowRight className="w-4 h-4" /></a></div>
+              <div className="flex-1 grid grid-cols-3 gap-x-6 gap-y-1 border-l border-gray-100 pl-8">{TOP_CATEGORIES.map(cat => (<a key={cat} href={`/products?category=${encodeURIComponent(cat)}`} className="group flex items-center justify-between py-2 px-3 rounded hover:bg-orange-50 transition-colors"><span className="text-[13px] font-semibold text-slate-700 group-hover:text-orange-700">{cat}</span><ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-orange-500 transform group-hover:translate-x-1 transition-all" /></a>))}</div>
             </div></div>
           </motion.div>
         )}
         {activeMegaMenu === 'industries' && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }} className="absolute top-20 left-0 right-0 bg-white border-b border-gray-200 shadow-xl overflow-hidden">
-            <div className="max-w-7xl mx-auto px-4 py-8"><div className="flex gap-12">
-              <div className="w-1/3"><h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2"><Factory className="w-5 h-5 text-orange-600" /> Sectors We Serve</h3><p className="text-sm text-slate-500 mb-6 leading-relaxed">We provide specialized chemical solutions tailored to over 20 global industries.</p><a href="/industries" className="inline-flex items-center gap-2 text-sm font-bold text-orange-600 hover:text-orange-700 transition-colors">Explore All Industries <ArrowRight className="w-4 h-4" /></a></div>
-              <div className="w-2/3 grid grid-cols-2 gap-x-8 gap-y-4 border-l border-gray-100 pl-12">{INDUSTRIES_MENU.map(ind => (<a key={ind.slug} href={`/industries/${ind.slug}`} className="group flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-gray-100"><div className="w-10 h-10 rounded-lg bg-gray-100 overflow-hidden shrink-0"><img src={ind.imageUrl} alt={ind.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform" referrerPolicy="no-referrer" /></div><div className="flex-1 min-w-0"><span className="block text-sm font-bold text-slate-900 truncate group-hover:text-orange-600 transition-colors">{ind.name}</span></div></a>))}</div>
+            <div className="max-w-7xl mx-auto px-4 py-6"><div className="flex gap-8">
+              <div className="w-56 shrink-0"><h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2"><Factory className="w-5 h-5 text-orange-600" /> Industries</h3><p className="text-[13px] text-slate-500 mb-6 leading-relaxed">Specialized chemical solutions for 20 industrial sectors.</p><a href="/industries" className="inline-flex items-center gap-2 text-sm font-bold text-orange-600 hover:text-orange-700 transition-colors">Explore All <ArrowRight className="w-4 h-4" /></a></div>
+              <div className="flex-1 grid grid-cols-3 gap-x-6 gap-y-1 border-l border-gray-100 pl-8">{INDUSTRIES_MENU.map(ind => (<a key={ind.slug} href={`/industries/${ind.slug}`} className="group flex items-center justify-between py-2 px-3 rounded hover:bg-slate-50 transition-colors"><span className="text-[13px] font-semibold text-slate-700 group-hover:text-orange-600 transition-colors">{ind.name}</span><ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-orange-500 transform group-hover:translate-x-1 transition-all" /></a>))}</div>
             </div></div>
           </motion.div>
         )}

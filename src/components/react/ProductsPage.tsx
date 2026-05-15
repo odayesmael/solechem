@@ -88,16 +88,6 @@ export default function ProductsPage({ products: PRODUCTS }: Props) {
     setCurrentPage(1);
   }, [search, activeCategory, activeIndustries]);
 
-  const hasActiveFilter = activeCategory !== 'All' || activeIndustries.length > 0;
-  useEffect(() => {
-    if (filteredProducts.length === 0 && search.trim().length >= 2 && hasActiveFilter) {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      debounceRef.current = setTimeout(() => fetchGlobal(search), 200);
-    } else {
-      setGlobalResults([]);
-    }
-  }, [filteredProducts.length, search, hasActiveFilter, fetchGlobal]);
-
   const toggleFilter = (setter: React.Dispatch<React.SetStateAction<string[]>>, value: string) => {
     setter(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
   };
@@ -133,6 +123,16 @@ export default function ProductsPage({ products: PRODUCTS }: Props) {
     }
     return sorted;
   }, [search, activeCategory, activeIndustries, sortBy]);
+
+  const hasActiveFilter = activeCategory !== 'All' || activeIndustries.length > 0;
+  useEffect(() => {
+    if (filteredProducts.length === 0 && search.trim().length >= 2 && hasActiveFilter) {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(() => fetchGlobal(search), 200);
+    } else {
+      setGlobalResults([]);
+    }
+  }, [filteredProducts.length, search, hasActiveFilter, fetchGlobal]);
 
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
   const paginatedProducts = filteredProducts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);

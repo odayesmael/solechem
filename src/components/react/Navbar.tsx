@@ -5,26 +5,26 @@ import { motion, AnimatePresence } from 'motion/react';
 import QuoteModal from './QuoteModal';
 
 const INDUSTRIES_MENU = [
-  { name: "Aerospace & Defense", slug: "aerospace-defense" },
-  { name: "Agriculture & Feed", slug: "agriculture-feed" },
-  { name: "Automotive", slug: "automotive" },
-  { name: "Biotechnology & Life Sciences", slug: "biotechnology-life-sciences" },
-  { name: "Building & Construction", slug: "building-construction" },
-  { name: "Coatings, Adhesives, Sealants & Elastomers", slug: "coatings-adhesives-sealants-elastomers" },
-  { name: "Electronics", slug: "electronics" },
-  { name: "Food & Nutrition", slug: "food-nutrition" },
-  { name: "Home Care & Industrial Cleaning", slug: "home-care-industrial-cleaning" },
-  { name: "Lubricants & Metalworking", slug: "lubricants-metalworking" },
-  { name: "Mining & Metals", slug: "mining-metals" },
-  { name: "Oil, Gas & Energy", slug: "oil-gas-energy" },
-  { name: "Personal Care & Cosmetics", slug: "personal-care-cosmetics" },
-  { name: "Pharmaceuticals & Healthcare", slug: "pharmaceuticals-healthcare" },
-  { name: "Plastics & Polymers", slug: "plastics-polymers" },
-  { name: "Printing & Packaging", slug: "printing-packaging" },
-  { name: "Pulp & Paper", slug: "pulp-paper" },
-  { name: "Rubber & Tire", slug: "rubber-tire" },
-  { name: "Textile, Leather & Paper", slug: "textile-leather-paper" },
-  { name: "Water Treatment", slug: "water-treatment" },
+  { name: "Aerospace & Defense", slug: "aerospace-defense", img: "/industries/Aerospace & Defense.webp" },
+  { name: "Agriculture & Feed", slug: "agriculture-feed", img: "/industries/Agriculture & Feed.webp" },
+  { name: "Automotive", slug: "automotive", img: "/industries/Automotive.webp" },
+  { name: "Biotechnology & Life Sciences", slug: "biotechnology-life-sciences", img: "/industries/Biotechnology & Life Sciences.webp" },
+  { name: "Building & Construction", slug: "building-construction", img: "/industries/Building & Construction.webp" },
+  { name: "Coatings, Adhesives, Sealants & Elastomers", slug: "coatings-adhesives-sealants-elastomers", img: "/industries/Coatings, Adhesives, Sealants & Elastomers.webp" },
+  { name: "Electronics", slug: "electronics", img: "/industries/Electronics.webp" },
+  { name: "Food & Nutrition", slug: "food-nutrition", img: "/industries/Food & Nutrition.webp" },
+  { name: "Home Care & Industrial Cleaning", slug: "home-care-industrial-cleaning", img: "/industries/Home Care & Industrial Cleaning.webp" },
+  { name: "Lubricants & Metalworking", slug: "lubricants-metalworking", img: "/industries/Lubricants & Metalworking.webp" },
+  { name: "Mining & Metals", slug: "mining-metals", img: "/industries/Mining & Metals.webp" },
+  { name: "Oil, Gas & Energy", slug: "oil-gas-energy", img: "/industries/Oil, Gas & Energy.webp" },
+  { name: "Personal Care & Cosmetics", slug: "personal-care-cosmetics", img: "/industries/Personal Care & Cosmetics.webp" },
+  { name: "Pharmaceuticals & Healthcare", slug: "pharmaceuticals-healthcare", img: "/industries/Pharmaceuticals & Healthcare.webp" },
+  { name: "Plastics & Polymers", slug: "plastics-polymers", img: "/industries/Plastics & Polymers.webp" },
+  { name: "Printing & Packaging", slug: "printing-packaging", img: "/industries/Printing & Packaging.webp" },
+  { name: "Pulp & Paper", slug: "pulp-paper", img: "/industries/Pulp & Paper.webp" },
+  { name: "Rubber & Tire", slug: "rubber-tire", img: "/industries/Rubber & Tire.webp" },
+  { name: "Textile, Leather & Paper", slug: "textile-leather-paper", img: "/industries/Textile, Leather & Paper.webp" },
+  { name: "Water Treatment", slug: "water-treatment", img: "/industries/Water Treatment.webp" },
 ];
 
 const TOP_CATEGORIES = [
@@ -111,8 +111,8 @@ export default function Navbar({ currentPath = '/' }: NavbarProps) {
         {activeMegaMenu === 'industries' && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }} className="absolute top-20 left-0 right-0 bg-white border-b border-gray-200 shadow-xl overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 py-6"><div className="flex gap-8">
-              <div className="w-56 shrink-0"><h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2"><Factory className="w-5 h-5 text-orange-600" /> Industries</h3><p className="text-[13px] text-slate-500 mb-6 leading-relaxed">Specialized chemical solutions for 20 industrial sectors.</p><a href="/industries" className="inline-flex items-center gap-2 text-sm font-bold text-orange-600 hover:text-orange-700 transition-colors">Explore All <ArrowRight className="w-4 h-4" /></a></div>
-              <div className="flex-1 grid grid-cols-3 gap-x-6 gap-y-1 border-l border-gray-100 pl-8">{INDUSTRIES_MENU.map(ind => (<a key={ind.slug} href={`/industries/${ind.slug}`} className="group flex items-center justify-between py-2 px-3 rounded hover:bg-slate-50 transition-colors"><span className="text-[13px] font-semibold text-slate-700 group-hover:text-orange-600 transition-colors">{ind.name}</span><ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-orange-500 transform group-hover:translate-x-1 transition-all" /></a>))}</div>
+              <div className="w-52 shrink-0"><h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2"><Factory className="w-5 h-5 text-orange-600" /> Industries</h3><p className="text-[13px] text-slate-500 mb-6 leading-relaxed">Specialized chemical solutions for 20 industrial sectors.</p><a href="/industries" className="inline-flex items-center gap-2 text-sm font-bold text-orange-600 hover:text-orange-700 transition-colors">Explore All <ArrowRight className="w-4 h-4" /></a></div>
+              <div className="flex-1 grid grid-cols-4 gap-x-4 gap-y-1.5 border-l border-gray-100 pl-8">{INDUSTRIES_MENU.map(ind => (<a key={ind.slug} href={`/industries/${ind.slug}`} className="group flex items-center gap-2.5 py-1.5 px-2 rounded hover:bg-slate-50 transition-colors"><div className="w-8 h-8 rounded bg-gray-100 overflow-hidden shrink-0"><img src={ind.img} alt={ind.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform" referrerPolicy="no-referrer" /></div><span className="text-[12px] font-semibold text-slate-700 group-hover:text-orange-600 transition-colors whitespace-nowrap">{ind.name}</span></a>))}</div>
             </div></div>
           </motion.div>
         )}

@@ -25,13 +25,15 @@ export default function IndustryProducts({ products, industryName }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState('name-asc');
   const [globalResults, setGlobalResults] = useState<any[]>([]);
+  const [showGlobalDropdown, setShowGlobalDropdown] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const searchBoxRef = useRef<HTMLDivElement>(null);
 
   const fetchGlobal = useCallback((q: string) => {
-    if (q.trim().length < 2) { setGlobalResults([]); return; }
+    if (q.trim().length < 2) { setGlobalResults([]); setShowGlobalDropdown(false); return; }
     fetch(`/api/search?q=${encodeURIComponent(q.trim())}`)
       .then(r => r.json())
-      .then(data => setGlobalResults(data))
+      .then(data => { setGlobalResults(data); setShowGlobalDropdown(data.length > 0); })
       .catch(() => {});
   }, []);
 
@@ -76,13 +78,24 @@ export default function IndustryProducts({ products, industryName }: Props) {
   };
 
   useEffect(() => {
-    if (filteredProducts.length === 0 && search.trim().length >= 2) {
+    if (search.trim().length >= 2) {
       if (debounceRef.current) clearTimeout(debounceRef.current);
       debounceRef.current = setTimeout(() => fetchGlobal(search), 200);
     } else {
       setGlobalResults([]);
+      setShowGlobalDropdown(false);
     }
-  }, [filteredProducts.length, search, fetchGlobal]);
+  }, [search, fetchGlobal]);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (searchBoxRef.current && !searchBoxRef.current.contains(e.target as Node)) {
+        setShowGlobalDropdown(false);
+      }
+    };
+    document.addEventListener('click', handler);
+    return () => document.removeEventListener('click', handler);
+  }, []);
 
   // Reset to page 1 when search changes
   const handleSearchChange = (val: string) => {
@@ -115,15 +128,43 @@ export default function IndustryProducts({ products, industryName }: Props) {
       <div id="industry-products-top" />
       {/* Toolbar */}
       <div className="bg-white p-3 border border-slate-200 shadow-sm flex flex-col md:flex-row gap-3 items-center justify-between">
-        <div className="relative flex-1 w-full flex items-center bg-slate-50 border border-slate-200 px-3">
+        <div ref={searchBoxRef} className="relative flex-1 w-full flex items-center bg-slate-50 border border-slate-200 px-3">
           <Search className="w-4 h-4 text-slate-400" />
           <input
             type="text"
             value={search}
             onChange={(e) => handleSearchChange(e.target.value)}
+            onFocus={() => { if (globalResults.length > 0 && search.trim().length >= 2) setShowGlobalDropdown(true); }}
             placeholder={`Search ${industryName} products...`}
             className="w-full h-10 pl-3 bg-transparent text-[13px] font-medium focus:outline-none transition-all text-slate-900 placeholder-slate-400"
+            autoComplete="off"
           />
+          {showGlobalDropdown && globalResults.length > 0 && (
+            <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-2xl z-50 max-h-[400px] overflow-y-auto">
+              <div className="px-4 py-2 border-b border-slate-100">
+                <span className="text-[11px] font-bold text-orange-600 uppercase tracking-widest flex items-center gap-1.5">
+                  <Search className="w-3.5 h-3.5" /> Results from All Products
+                </span>
+              </div>
+              {globalResults.map((r: any) => (
+                <a key={r.slug} href={`/products/${r.slug}`} className="flex items-center gap-3 px-4 py-3 hover:bg-orange-50 transition-colors border-b border-slate-50 last:border-0">
+                  <div className="w-8 h-8 shrink-0 rounded bg-slate-100 flex items-center justify-center">
+                    <Package className="w-4 h-4 text-slate-400" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-bold text-slate-900 truncate">{r.name}</div>
+                    <div className="text-[11px] text-slate-500 flex items-center gap-2">
+                      <span>CAS: {r.cas}</span>
+                      {r.ec && <><span className="text-slate-300">|</span><span>EC: {r.ec}</span></>}
+                    </div>
+                  </div>
+                </a>
+              ))}
+              <a href={`/products?q=${encodeURIComponent(search)}`} className="block px-4 py-2.5 text-center text-[12px] font-bold text-orange-600 hover:bg-orange-50 uppercase tracking-wider">
+                View all results →
+              </a>
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-1 shrink-0 px-2">
           <select

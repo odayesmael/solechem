@@ -99,38 +99,22 @@ const featuredIndustries = INDUSTRIES.slice(0, 8);
           </p>
 
           <!-- Search Filter -->
-          <div class="pt-8 pb-4 w-full max-w-5xl mx-auto relative z-30 flex justify-center">
-            <form action="/products" method="get" class="bg-white p-2 md:p-3 rounded flex flex-col md:flex-row gap-2 shadow-2xl text-left relative w-full">
-              <!-- Search Input -->
+          <div class="pt-8 pb-4 w-full max-w-4xl mx-auto relative z-30 flex justify-center">
+            <form id="hero-search-form" action="/products" method="get" class="bg-white p-2 md:p-3 rounded flex flex-col md:flex-row gap-2 shadow-2xl text-left relative w-full">
               <div class="relative w-full group flex-1">
                 <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                 </div>
                 <input
+                  id="hero-search-input"
                   type="text"
                   name="q"
-                  placeholder="Search by CAS, Formula, or Name..."
+                  placeholder="Search by CAS, EC Number, Formula, or Name..."
+                  autocomplete="off"
                   class="w-full h-14 pl-12 pr-4 bg-slate-50 hover:bg-slate-100 text-slate-900 placeholder:text-slate-500 outline-none focus:bg-slate-100 rounded transition-all border border-transparent focus:border-slate-300"
                 />
-              </div>
-
-              <div class="w-px bg-slate-200 hidden md:block mx-1"></div>
-
-              <!-- Industry Dropdown -->
-              <div class="relative md:w-64 group shrink-0">
-                <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M17 18h1"/><path d="M12 18h1"/><path d="M7 18h1"/></svg>
-                </div>
-                <select
-                  name="industry"
-                  class="w-full h-14 pl-12 pr-10 bg-slate-50 hover:bg-slate-100 text-slate-900 outline-none focus:bg-slate-100 rounded transition-all appearance-none cursor-pointer border border-transparent focus:border-slate-300 font-medium"
-                >
-                  <option value="">All Industries</option>
-                  {INDUSTRIES.map(ind => (
-                    <option value={ind.name}>{ind.name}</option>
-                  ))}
-                </select>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute right-4 top-1/2 -translate-y-1/2 rotate-90 pointer-events-none"><path d="m9 18 6-6-6-6"/></svg>
+                <!-- AJAX Results Dropdown -->
+                <div id="hero-search-results" class="hidden absolute left-0 right-0 top-full mt-1 bg-white rounded-lg shadow-2xl border border-slate-200 max-h-[420px] overflow-y-auto z-50"></div>
               </div>
 
               <button
@@ -511,6 +495,61 @@ const featuredIndustries = INDUSTRIES.slice(0, 8);
         });
       }
     });
+  </script>
+
+  <!-- Hero AJAX Search -->
+  <script>
+    (function() {
+      const input = document.getElementById('hero-search-input') as HTMLInputElement;
+      const dropdown = document.getElementById('hero-search-results');
+      const form = document.getElementById('hero-search-form');
+      if (!input || !dropdown || !form) return;
+
+      let timer: ReturnType<typeof setTimeout>;
+
+      function doSearch(q: string) {
+        if (q.trim().length < 2) { dropdown.innerHTML = ''; dropdown.classList.add('hidden'); return; }
+        fetch('/api/search?q=' + encodeURIComponent(q.trim()))
+          .then(r => r.json())
+          .then((data: any[]) => {
+            if (!data.length) { dropdown.innerHTML = '<div class="px-4 py-6 text-center text-slate-400 text-sm">No products found</div>'; dropdown.classList.remove('hidden'); return; }
+            let html = '';
+            data.forEach(p => {
+              html += `<a href="/products/${p.slug}" class="flex items-center gap-3 px-4 py-3 hover:bg-orange-50 transition-colors border-b border-slate-100 last:border-0">
+                <div class="w-9 h-9 shrink-0 rounded bg-slate-100 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-semibold text-slate-900 truncate">${p.name}</div>
+                  <div class="text-xs text-slate-500 flex flex-wrap gap-x-3">
+                    <span>CAS: ${p.cas}</span>
+                    ${p.ec ? '<span>EC: ' + p.ec + '</span>' : ''}
+                    <span>${p.formula}</span>
+                  </div>
+                </div>
+                <span class="text-[10px] font-bold text-orange-600 bg-orange-50 border border-orange-100 px-2 py-0.5 rounded shrink-0 hidden sm:inline">${p.category}</span>
+              </a>`;
+            });
+            html += `<a href="/products?q=${encodeURIComponent(q.trim())}" class="block px-4 py-3 text-center text-sm font-semibold text-orange-600 hover:bg-orange-50 transition-colors">View all results →</a>`;
+            dropdown.innerHTML = html;
+            dropdown.classList.remove('hidden');
+          })
+          .catch(() => {});
+      }
+
+      input.addEventListener('input', () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => doSearch(input.value), 200);
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!form.contains(e.target as Node)) { dropdown.classList.add('hidden'); }
+      });
+
+      input.addEventListener('focus', () => {
+        if (input.value.trim().length >= 2 && dropdown.innerHTML) dropdown.classList.remove('hidden');
+      });
+    })();
   </script>
 
   <!-- Hero floating elements: parallax + float animation -->

@@ -10,7 +10,7 @@ const INDUSTRIES_MENU = [
   { name: "Automotive", slug: "automotive", img: "/industries/Automotive.webp" },
   { name: "Biotechnology & Life Sciences", slug: "biotechnology-life-sciences", img: "/industries/Biotechnology & Life Sciences.webp" },
   { name: "Building & Construction", slug: "building-construction", img: "/industries/Building & Construction.webp" },
-  { name: "Coatings, Adhesives, Sealants & Elastomers", slug: "coatings-adhesives-sealants-elastomers", img: "/industries/Coatings, Adhesives, Sealants & Elastomers.webp" },
+  { name: "CASE (Coatings & Adhesives)", slug: "coatings-adhesives-sealants-elastomers", img: "/industries/Coatings, Adhesives, Sealants & Elastomers.webp" },
   { name: "Electronics", slug: "electronics", img: "/industries/Electronics.webp" },
   { name: "Food & Nutrition", slug: "food-nutrition", img: "/industries/Food & Nutrition.webp" },
   { name: "Home Care & Industrial Cleaning", slug: "home-care-industrial-cleaning", img: "/industries/Home Care & Industrial Cleaning.webp" },

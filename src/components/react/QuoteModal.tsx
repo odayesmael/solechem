@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Send, CheckCircle2, Building2, User, Mail, Phone, Package, FileText, Globe, DollarSign, Target, Truck, FlaskConical } from 'lucide-react';
-import { Product } from '@/types';
+import type { Product } from '@/types';
 
 interface QuoteModalProps {
   isOpen: boolean;

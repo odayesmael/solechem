@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { Search, Filter, Grid, List, ArrowRight, ChevronRight, ChevronLeft, X } from 'lucide-react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import { Search, Filter, Grid, List, ArrowRight, ChevronRight, ChevronLeft, X, Package } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/lib/utils';
 
@@ -34,6 +34,16 @@ export default function ProductsPage({ products: PRODUCTS }: Props) {
   const [activeIndustries, setActiveIndustries] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState('name-asc');
   const [currentPage, setCurrentPage] = useState(1);
+  const [globalResults, setGlobalResults] = useState<any[]>([]);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const fetchGlobal = useCallback((q: string) => {
+    if (q.trim().length < 2) { setGlobalResults([]); return; }
+    fetch(`/api/search?q=${encodeURIComponent(q.trim())}`)
+      .then(r => r.json())
+      .then(data => setGlobalResults(data))
+      .catch(() => {});
+  }, []);
 
   // Read URL params on client mount
   useEffect(() => {
@@ -77,6 +87,16 @@ export default function ProductsPage({ products: PRODUCTS }: Props) {
   useEffect(() => {
     setCurrentPage(1);
   }, [search, activeCategory, activeIndustries]);
+
+  const hasActiveFilter = activeCategory !== 'All' || activeIndustries.length > 0;
+  useEffect(() => {
+    if (filteredProducts.length === 0 && search.trim().length >= 2 && hasActiveFilter) {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(() => fetchGlobal(search), 200);
+    } else {
+      setGlobalResults([]);
+    }
+  }, [filteredProducts.length, search, hasActiveFilter, fetchGlobal]);
 
   const toggleFilter = (setter: React.Dispatch<React.SetStateAction<string[]>>, value: string) => {
     setter(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
@@ -422,15 +442,47 @@ export default function ProductsPage({ products: PRODUCTS }: Props) {
 
             {/* Empty State */}
             {filteredProducts.length === 0 && (
-              <div className="py-24 text-center space-y-4 bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 shadow-sm">
-                <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 flex items-center justify-center mx-auto">
-                  <Filter className="w-6 h-6 text-slate-400" />
+              <div className="py-10 bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 shadow-sm px-8">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 flex items-center justify-center mx-auto mb-4">
+                    <Filter className="w-6 h-6 text-slate-400" />
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">No products found</h4>
+                  <p className="text-[13px] text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed mt-2">
+                    {search ? <>No products matching "<span className="font-bold text-slate-700 dark:text-slate-300">{search}</span>" in the current filters.</> : 'No products match your current filter criteria.'}
+                  </p>
+                  <button onClick={clearAllFilters} className="bg-white border border-slate-200 hover:border-orange-500 text-slate-900 px-6 py-2.5 font-semibold text-[13px] transition-all mt-4 hover:shadow-sm">
+                    Clear All Filters
+                  </button>
                 </div>
-                <h4 className="text-lg font-bold text-slate-900 dark:text-white">No products found</h4>
-                <p className="text-[13px] text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">We couldn't find any products matching your current filter criteria. Try adjusting your selections or search terms.</p>
-                <button onClick={clearAllFilters} className="bg-white border border-slate-200 hover:border-orange-500 text-slate-900 px-6 py-2.5 font-semibold text-[13px] transition-all mt-4 hover:shadow-sm">
-                  Clear All Filters
-                </button>
+                {globalResults.length > 0 && (
+                  <div className="border-t border-slate-200 dark:border-slate-700 pt-6">
+                    <h4 className="text-[11px] font-bold text-orange-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+                      <Search className="w-4 h-4" />
+                      Results from All Products
+                    </h4>
+                    <div className="space-y-1">
+                      {globalResults.map((r: any) => (
+                        <a key={r.slug} href={`/products/${r.slug}`} className="flex items-center gap-3 px-4 py-3 hover:bg-orange-50 dark:hover:bg-orange-500/10 transition-colors border border-slate-100 dark:border-slate-800 rounded-sm group">
+                          <div className="w-9 h-9 shrink-0 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:bg-orange-100 dark:group-hover:bg-orange-500/20 transition-colors">
+                            <Package className="w-4 h-4 text-slate-400 group-hover:text-orange-600 transition-colors" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-orange-600 transition-colors truncate">{r.name}</div>
+                            <div className="text-[11px] text-slate-500 flex items-center gap-2">
+                              <span>CAS: {r.cas}</span>
+                              {r.ec && <><span className="text-slate-300">|</span><span>EC: {r.ec}</span></>}
+                            </div>
+                          </div>
+                          <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-orange-600 transition-colors shrink-0" />
+                        </a>
+                      ))}
+                    </div>
+                    <a href={`/products?q=${encodeURIComponent(search)}`} className="block mt-4 text-center text-sm font-semibold text-orange-600 hover:text-orange-700 transition-colors">
+                      View all results →
+                    </a>
+                  </div>
+                )}
               </div>
             )}
         </div>

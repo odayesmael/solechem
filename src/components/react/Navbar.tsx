@@ -120,11 +120,8 @@ export default function Navbar({ currentPath = '/' }: NavbarProps) {
                     <div className="text-[11px] text-slate-500 flex items-center gap-2">
                       <span>CAS: {r.cas}</span>
                       {r.ec && <><span className="text-slate-300">|</span><span>EC: {r.ec}</span></>}
-                      <span className="text-slate-300">|</span>
-                      <span>{r.formula}</span>
                     </div>
                   </div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0">{r.category}</span>
                 </a>
               ))}
               <a href={`/products?q=${encodeURIComponent(searchQuery)}`} className="block px-4 py-2.5 text-center text-[12px] font-bold text-orange-600 hover:bg-orange-50 uppercase tracking-wider" onClick={() => setShowResults(false)}>
@@ -188,7 +185,7 @@ export default function Navbar({ currentPath = '/' }: NavbarProps) {
                 <a key={r.slug} href={`/products/${r.slug}`} className="flex items-center gap-3 px-4 py-3 hover:bg-orange-50 border-b border-gray-50 last:border-0" onClick={() => { setShowResults(false); setIsMenuOpen(false); }}>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-bold text-slate-900 truncate">{r.name}</div>
-                    <div className="text-[11px] text-slate-500">CAS: {r.cas} | {r.formula}</div>
+                    <div className="text-[11px] text-slate-500">CAS: {r.cas}{r.ec ? ` | EC: ${r.ec}` : ''}</div>
                   </div>
                 </a>
               ))}

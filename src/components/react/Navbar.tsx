@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Search, Phone, ClipboardList, Menu, X, ChevronRight, Beaker, Factory, ShieldCheck, ArrowRight, Package } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
@@ -50,8 +50,12 @@ export default function Navbar({ currentPath = '/' }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [showResults, setShowResults] = useState(false);
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const isLightMode = isScrolled || activeMegaMenu !== null || currentPath !== '/';
 
   useEffect(() => {
@@ -60,9 +64,32 @@ export default function Navbar({ currentPath = '/' }: NavbarProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) setShowResults(false);
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const doSearch = useCallback((q: string) => {
+    if (q.trim().length < 2) { setSearchResults([]); setShowResults(false); return; }
+    fetch(`/api/search?q=${encodeURIComponent(q.trim())}`)
+      .then(r => r.json())
+      .then(data => { setSearchResults(data); setShowResults(data.length > 0); })
+      .catch(() => {});
+  }, []);
+
+  const onSearchChange = (val: string) => {
+    setSearchQuery(val);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => doSearch(val), 200);
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
+      setShowResults(false);
       window.location.href = `/products?q=${encodeURIComponent(searchQuery.trim())}`;
       setIsMenuOpen(false);
       setSearchQuery('');
@@ -75,11 +102,37 @@ export default function Navbar({ currentPath = '/' }: NavbarProps) {
         <a href="/" className="flex items-center gap-2 shrink-0">
           <img src={isLightMode ? "https://www.solechem.eu/solechem-logo-small.webp" : "https://www.solechem.eu/solechem-logo-white.webp"} alt="SoleChem Logo" className="h-12 w-auto object-contain" />
         </a>
-        <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-md relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search CAS, formula, or product..." className="w-full h-9 pl-10 pr-12 bg-gray-100/50 dark:bg-slate-800 border border-gray-200/50 dark:border-slate-700 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:bg-white dark:focus:bg-slate-900 transition-all text-slate-900 dark:text-white placeholder:text-gray-400" />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-gray-400 border border-gray-200/50 dark:border-slate-700 px-1 rounded">⌘K</div>
-        </form>
+        <div ref={searchRef} className="hidden md:block flex-1 max-w-md relative">
+          <form onSubmit={handleSearch} className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input type="text" value={searchQuery} onChange={(e) => onSearchChange(e.target.value)} onFocus={() => searchResults.length > 0 && setShowResults(true)} placeholder="Search CAS, formula, or product..." className="w-full h-9 pl-10 pr-12 bg-gray-100/50 dark:bg-slate-800 border border-gray-200/50 dark:border-slate-700 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:bg-white dark:focus:bg-slate-900 transition-all text-slate-900 dark:text-white placeholder:text-gray-400" autoComplete="off" />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono text-gray-400 border border-gray-200/50 dark:border-slate-700 px-1 rounded">⌘K</div>
+          </form>
+          {showResults && searchResults.length > 0 && (
+            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-sm shadow-xl z-[60] max-h-[400px] overflow-y-auto">
+              {searchResults.map((r: any) => (
+                <a key={r.slug} href={`/products/${r.slug}`} className="flex items-center gap-3 px-4 py-3 hover:bg-orange-50 transition-colors border-b border-gray-50 last:border-0" onClick={() => setShowResults(false)}>
+                  <div className="w-8 h-8 bg-slate-100 rounded flex items-center justify-center shrink-0">
+                    <Beaker className="w-4 h-4 text-slate-400" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-bold text-slate-900 truncate">{r.name}</div>
+                    <div className="text-[11px] text-slate-500 flex items-center gap-2">
+                      <span>CAS: {r.cas}</span>
+                      {r.ec && <><span className="text-slate-300">|</span><span>EC: {r.ec}</span></>}
+                      <span className="text-slate-300">|</span>
+                      <span>{r.formula}</span>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0">{r.category}</span>
+                </a>
+              ))}
+              <a href={`/products?q=${encodeURIComponent(searchQuery)}`} className="block px-4 py-2.5 text-center text-[12px] font-bold text-orange-600 hover:bg-orange-50 uppercase tracking-wider" onClick={() => setShowResults(false)}>
+                View all results →
+              </a>
+            </div>
+          )}
+        </div>
         <div className="hidden lg:flex items-center h-full">
           <div className="h-full flex items-center px-4 cursor-pointer" onMouseEnter={() => setActiveMegaMenu('products')}>
             <a href="/products" className={cn("text-sm font-semibold transition-colors", currentPath === '/products' ? "text-orange-600" : (isLightMode ? "text-slate-600 dark:text-slate-300 hover:text-orange-600" : "text-white/80 hover:text-white"))}>Products</a>
@@ -128,7 +181,19 @@ export default function Navbar({ currentPath = '/' }: NavbarProps) {
 
       {isMenuOpen && (
         <div className="lg:hidden absolute top-20 left-0 right-0 bg-white border-b border-gray-200 p-4 flex flex-col gap-4 shadow-xl max-h-[calc(100vh-5rem)] overflow-y-auto">
-          <form onSubmit={handleSearch} className="relative"><Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" /><input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search CAS, formula, or product..." className="w-full h-12 pl-10 pr-4 bg-gray-100 border border-gray-200 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:bg-white transition-all text-slate-900" /></form>
+          <form onSubmit={handleSearch} className="relative"><Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" /><input type="text" value={searchQuery} onChange={(e) => onSearchChange(e.target.value)} placeholder="Search CAS, formula, or product..." className="w-full h-12 pl-10 pr-4 bg-gray-100 border border-gray-200 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:bg-white transition-all text-slate-900" autoComplete="off" /></form>
+          {showResults && searchResults.length > 0 && (
+            <div className="bg-white border border-gray-200 rounded-xl shadow-lg max-h-[300px] overflow-y-auto">
+              {searchResults.map((r: any) => (
+                <a key={r.slug} href={`/products/${r.slug}`} className="flex items-center gap-3 px-4 py-3 hover:bg-orange-50 border-b border-gray-50 last:border-0" onClick={() => { setShowResults(false); setIsMenuOpen(false); }}>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-bold text-slate-900 truncate">{r.name}</div>
+                    <div className="text-[11px] text-slate-500">CAS: {r.cas} | {r.formula}</div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          )}
           <div className="flex items-center justify-between gap-3 py-2">
             <a href="tel:+390230556150" className="flex-1 flex items-center justify-center gap-2 bg-slate-100 text-slate-900 py-3 rounded-xl font-bold text-sm"><Phone className="w-4 h-4 text-orange-600" />Call Us</a>
             <button onClick={() => { setIsMenuOpen(false); setIsQuoteModalOpen(true); }} className="flex-1 flex items-center justify-center gap-2 bg-orange-50 text-orange-600 py-3 rounded-xl font-bold text-sm"><ClipboardList className="w-5 h-5" />Submit RFQ</button>

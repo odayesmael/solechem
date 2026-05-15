@@ -379,10 +379,12 @@ export default function ProductsPage({ products: PRODUCTS }: Props) {
                                 <span className="text-[10px] text-slate-400 uppercase font-semibold">CAS Number</span>
                                 <span className="text-[13px] font-mono font-medium text-slate-700 dark:text-slate-300">{product.cas}</span>
                               </div>
+                              {product.formula && (
                               <div className="flex flex-col">
                                 <span className="text-[10px] text-slate-400 uppercase font-semibold">Formula</span>
                                 <span className="text-[13px] font-mono font-medium text-slate-700 dark:text-slate-300">{product.formula}</span>
                               </div>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -407,7 +409,7 @@ export default function ProductsPage({ products: PRODUCTS }: Props) {
                           {product.cas}
                         </div>
                         <div className="hidden md:block col-span-2 font-mono text-[12px] text-slate-600 dark:text-slate-400 line-clamp-1">
-                          {product.formula}
+                          {product.formula || '—'}
                         </div>
                         <div className="hidden md:block col-span-2">
                           <span className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-[9px] font-semibold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 uppercase tracking-widest line-clamp-1 truncate">

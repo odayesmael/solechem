@@ -266,7 +266,7 @@ export default function IndustryProducts({ products, industryName }: Props) {
                     <div className="text-[11px] text-slate-500 md:hidden mt-1 font-mono">CAS: {product.cas}</div>
                   </div>
                   <div className="hidden md:block col-span-2 font-mono text-[12px] text-slate-600">{product.cas}</div>
-                  <div className="hidden md:block col-span-2 font-mono text-[12px] text-slate-600 line-clamp-1">{product.formula}</div>
+                  <div className="hidden md:block col-span-2 font-mono text-[12px] text-slate-600 line-clamp-1">{product.formula || '—'}</div>
                   <div className="hidden md:block col-span-2">
                     <span className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-[9px] font-semibold bg-slate-100 text-slate-600 uppercase tracking-widest line-clamp-1 truncate">
                       {product.category}
